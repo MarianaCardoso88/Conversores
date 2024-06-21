@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Caminho base onde estão localizadas as pastas originais
-BASE_PATH="/home/vini/Desktop/Dados_Brutos_Univas_2024"
+BASE_PATH="/home/vini/Desktop/NovosExamesUnivas06-2024"
 # Caminho onde queremos criar as novas pastas organizadas por data
-OUTPUT_BASE_PATH="/home/vini/Desktop/pastas_organizadas_com_duplicatas_de_datas"
+OUTPUT_BASE_PATH="/home/vini/Desktop/novosExamesUnivasOrganizados"
 
 # Função para organizar arquivos por data
 organizar_arquivos_por_data() {
@@ -33,9 +33,24 @@ organizar_arquivos_por_data() {
 				nova_pasta="$output_base_path/$data"
 				mkdir -p "$nova_pasta"
 
-				# Copiar o arquivo para a nova pasta
-				cp "$file_path" "$nova_pasta/"
-				echo "Copiado $file_path para $nova_pasta/"
+				# Armazena o nome do arquivo e o caminho em variáveis
+				base_name=$(basename "$file_path")
+				dest_path="$nova_pasta/$base_name"
+
+				# Verificar se o arquivo já existe na nova pasta
+				if [[ -e $dest_path ]]; then
+					count=1
+					while [[ -e "${dest_path}_$count" ]]; do
+						((count++))
+					done
+					dest_path="${dest_path}_$count"
+					cp "$file_path" "$dest_path"
+					echo "$file_path já existe, copiado como ${base_name}_$count para $nova_pasta/"
+				else
+					# Copiar o arquivo para a nova pasta com o novo nome
+					cp "$file_path" "$nova_pasta/"
+					echo "Copiado $file_path para $nova_pasta/"
+				fi
 			done
 		else
 			echo "Nenhuma data encontrada no formato DD/MM/YY no arquivo $file_path"
