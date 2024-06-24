@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# - O Seguinte script copia cada arquivo dentro de um diretório raiz de profundidade qualquer e cola ele dentro de uma pasta específica da data retirada de dentro do próprio arquivo
+# - Como os arquivos brutos podem estar em pastas diferentes, pode existir arquivos com mesmo nome, o script adiciona (1), (2) ou (3) e assim por diante, no nome do arquivo caso a pasta destino tenha um arquivo com mesmo nome
+#     - Isso acaba ocasionando na duplicação de alguns exames
+# - Para arquivos com mais de uma data o script adiciona ele em pastas de datas diferentes, ou seja, o dado é duplicado.
+
 # Caminho base onde estão localizadas as pastas originais
 BASE_PATH="/home/vini/Desktop/NovosExamesUnivas06-2024"
 # Caminho onde queremos criar as novas pastas organizadas por data
