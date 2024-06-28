@@ -33,6 +33,9 @@ def transpose_exam(input_file_path, output_file_path):
     # Transpondo o DataFrame
     df_transposto = df.T
 
+    # Resetando o índice para transformar o índice em uma coluna regular
+    df_transposto.reset_index(inplace=True)
+
     # Definir o cabeçalho do DataFrame transposto para ser igual à primeira linha do DataFrame original
     df_transposto.columns = df_transposto.iloc[0]
 
@@ -47,6 +50,7 @@ def organize_exams_code(input_file, output_file):
     df = pd.read_excel(input_file)
     number_of_exams = count_exams(input_file)
 
+    # Condição para caso o exame não possua código ou possua mais que um código
     if (number_of_exams == 0 or number_of_exams > 1):
         # Adicionando o caminho do arquivo ao arquivo de log
         with open("./logs/arquivos_com_mais_de_um_exame.log", 'a') as arquivo_log:
@@ -70,6 +74,6 @@ def organize_exams_code(input_file, output_file):
         df_modificado.to_excel(output_file, index=False)
 
 if __name__ == '__main__':
-    input_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/06_main_excel/03/6028212.xlsx'
+    input_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/06_main_excel_sem_colunas/03/6028212.xlsx'
     output_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/6028212.xlsx'
     transpose_exam(input_file, output_file)
