@@ -11,7 +11,6 @@ def remove_colunas_arquivo(input_file_path, output_file_path):
     df_modificado = df.drop(columns=colunas_para_remover)
 
     # Salvando o DataFrame modificado em um novo arquivo Excel
-    # Substitua 'novo_arquivo.xlsx' pelo nome desejado para o arquivo resultante
     df_modificado.to_excel(output_file_path, index=False)
 
 def count_exams(file_path):
@@ -26,6 +25,22 @@ def count_exams(file_path):
 
     # Contando quantos são inteiros
     return numeros_inteiros.sum()
+
+def transpose_exam(input_file_path, output_file_path):
+    # Lendo o arquivo Excel
+    df = pd.read_excel(input_file_path)
+
+    # Transpondo o DataFrame
+    df_transposto = df.T
+
+    # Definir o cabeçalho do DataFrame transposto para ser igual à primeira linha do DataFrame original
+    df_transposto.columns = df_transposto.iloc[0]
+
+    # Remover a primeira linha do DataFrame transposto
+    df_transposto = df_transposto[1:]
+
+    # Salvando o DataFrame modificado em um novo arquivo Excel
+    df_transposto.to_excel(output_file_path, index=False)
 
 def organize_exams_code(input_file, output_file):
     # Lendo o arquivo Excel
@@ -55,6 +70,6 @@ def organize_exams_code(input_file, output_file):
         df_modificado.to_excel(output_file, index=False)
 
 if __name__ == '__main__':
-    input_file = './exames/exames_organizados.xlsx'
-    output_file = './exames/exames_organizados_modificado.xlsx'
-    organize_exams_code(input_file, output_file)
+    input_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/06_main_excel/03/6028212.xlsx'
+    output_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/6028212.xlsx'
+    transpose_exam(input_file, output_file)
