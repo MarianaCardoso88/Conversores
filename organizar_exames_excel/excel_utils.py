@@ -26,24 +26,33 @@ def count_exams(file_path):
     # Contando quantos são inteiros
     return numeros_inteiros.sum()
 
+# A função transpõe apenas arquivos com um exame e armazena em log os arquivos que possuem mais de um exame
 def transpose_exam(input_file_path, output_file_path):
     # Lendo o arquivo Excel
     df = pd.read_excel(input_file_path)
+    number_of_exams = count_exams(input_file)
 
-    # Transpondo o DataFrame
-    df_transposto = df.T
+    # Condição para caso o exame não possua código ou possua mais que um código
+    if (number_of_exams == 0 or number_of_exams > 1):
+        # Adicionando o caminho do arquivo ao arquivo de log
+        with open("./logs/arquivos_com_mais_de_um_exame.log", 'a') as arquivo_log:
+            arquivo_log.write(input_file + "\n")
+        
+    if (number_of_exams == 1):
+        # Transpondo o DataFrame
+        df_transposto = df.T
 
-    # Resetando o índice para transformar o índice em uma coluna regular
-    df_transposto.reset_index(inplace=True)
+        # Resetando o índice para transformar o índice em uma coluna regular
+        df_transposto.reset_index(inplace=True)
 
-    # Definir o cabeçalho do DataFrame transposto para ser igual à primeira linha do DataFrame original
-    df_transposto.columns = df_transposto.iloc[0]
+        # Definir o cabeçalho do DataFrame transposto para ser igual à primeira linha do DataFrame original
+        df_transposto.columns = df_transposto.iloc[0]
 
-    # Remover a primeira linha do DataFrame transposto
-    df_transposto = df_transposto[1:]
+        # Remover a primeira linha do DataFrame transposto
+        df_transposto = df_transposto[1:]
 
-    # Salvando o DataFrame modificado em um novo arquivo Excel
-    df_transposto.to_excel(output_file_path, index=False)
+        # Salvando o DataFrame modificado em um novo arquivo Excel
+        df_transposto.to_excel(output_file_path, index=False)
 
 def organize_exams_code(input_file, output_file):
     # Lendo o arquivo Excel
@@ -74,6 +83,6 @@ def organize_exams_code(input_file, output_file):
         df_modificado.to_excel(output_file, index=False)
 
 if __name__ == '__main__':
-    input_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/06_main_excel_sem_colunas/03/6028212.xlsx'
-    output_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/6028212.xlsx'
-    transpose_exam(input_file, output_file)
+    input_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/6028212.xlsx'
+    output_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/6028212_arrumado.xlsx'
+    organize_exams_code(input_file, output_file)
