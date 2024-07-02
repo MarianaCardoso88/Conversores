@@ -36,12 +36,13 @@ def txt_to_excel(input_folder_path, output_folder_path):
             for linha in linhas:
                 # Divide a linha com base na tabulação e adiciona as partes como colunas
                 colunas = linha.strip().split('\t')
+                colunas = [convert_to_float(coluna) for coluna in colunas]
                 sheet.append(colunas)
 
             # Salvando o arquivo Excel
             workbook.save(output_file_path)
 
-            mensagem_log = "Conversão de txt para excel concluída para" + file_name + "Arquivo de saída salvo em" + output_file_path + "\n"
+            mensagem_log = "Conversão de txt para excel concluída para " + file_name + " Arquivo de saída salvo em" + output_file_path + "\n"
             # Abrindo o arquivo de log em modo de adição e adicionando a mensagem
             with open(caminho_para_o_arquivo_de_log, 'a') as arquivo_log:
                 arquivo_log.write(mensagem_log)
@@ -102,6 +103,13 @@ def detect_encoding(file_path):
         detector.close()
     return detector.result['encoding']
 
+def convert_to_float(value):
+    value = value.replace(',', '.')
+    try:
+        return float(value)
+    except ValueError:
+        return value
+
 def convert_to_txt(input_file, output_file):
     # Detectando a codificação do arquivo
     encoding = detect_encoding(input_file)
@@ -118,3 +126,6 @@ def convert_to_txt(input_file, output_file):
     # Escrevendo o conteúdo no arquivo de texto
     with open(output_file, 'w', encoding='utf-8') as txt_file:
         txt_file.write(content)
+
+if __name__ == "__main__":
+    txt_to_excel('/home/vini/Desktop/novosExamesUnivasOrganizados/2024/teste/04', '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/teste/04_excel')
