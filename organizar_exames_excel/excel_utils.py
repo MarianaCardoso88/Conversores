@@ -21,7 +21,7 @@ def count_exams(file_path):
     primeira_coluna = df.iloc[:, 0]
 
     # Verificando quais elementos são inteiros no formato string
-    numeros_inteiros = primeira_coluna.apply(lambda x: x.isdigit() if isinstance(x, str) else False)
+    numeros_inteiros = primeira_coluna.apply(lambda x: isinstance(x, int) or (isinstance(x, str) and x.isdigit()))
 
     # Contando quantos são inteiros
     return numeros_inteiros.sum()
@@ -30,13 +30,13 @@ def count_exams(file_path):
 def transpose_exam(input_file_path, output_file_path):
     # Lendo o arquivo Excel
     df = pd.read_excel(input_file_path)
-    number_of_exams = count_exams(input_file)
+    number_of_exams = count_exams(input_file_path)
 
     # Condição para caso o exame não possua código ou possua mais que um código
     if (number_of_exams == 0 or number_of_exams > 1):
         # Adicionando o caminho do arquivo ao arquivo de log
         with open("./logs/arquivos_com_mais_de_um_exame.log", 'a') as arquivo_log:
-            arquivo_log.write(input_file + "\n")
+            arquivo_log.write(input_file_path + "\n")
         
     if (number_of_exams == 1):
         # Transpondo o DataFrame
@@ -57,32 +57,35 @@ def transpose_exam(input_file_path, output_file_path):
 def organize_exams_code(input_file, output_file):
     # Lendo o arquivo Excel
     df = pd.read_excel(input_file)
-    number_of_exams = count_exams(input_file)
+    
+    # Salvando o cabeçalho da terceira coluna (Código do exame)
+    third_col_header = df.columns[2]
 
-    # Condição para caso o exame não possua código ou possua mais que um código
-    if (number_of_exams == 0 or number_of_exams > 1):
-        # Adicionando o caminho do arquivo ao arquivo de log
-        with open("./logs/arquivos_com_mais_de_um_exame.log", 'a') as arquivo_log:
-            arquivo_log.write(input_file + "\n")
-        
-    if (number_of_exams == 1):
-        # Converter a segunda coluna para o tipo 'object'
-        df.iloc[:, 1] = df.iloc[:, 1].astype('object')
-        
-        # Pegar o código
-        valor = df.iloc[1, 0]
+    # Atribuindo o cabeçalhos da terceira coluna como valor na terceira coluna, primeira linha
+    df.iat[0, 2] = pd.to_numeric(third_col_header, errors='coerce')
 
-        # Colocar esse código na quarta linha e segunda coluna
-        df.iloc[3, 1] = valor
+    # Acessa os nomes atuais das colunas
+    nomes_atuais = df.columns.tolist()
 
-        # Apagar horários e linha que estava o código
-        # Apagar as duas primeiras linhas de uma vez, criando um novo DataFrame modificado
-        df_modificado = df.drop(df.index[:2])
+    # Substitui os nomes das primeiras 3 colunas
+    nomes_atuais[:3] = ['Data', 'Atendimento', 'Código']
 
-        # Salvar o arquivo Excel
-        df_modificado.to_excel(output_file, index=False)
+    # Atribui a lista modificada de volta a df.columns
+    df.columns = nomes_atuais
+
+    # Salvando o DataFrame modificado
+    df.to_excel(output_file, index=False)
+
+def verify_type(input_file):
+    # Lendo o arquivo Excel
+    df = pd.read_excel(input_file)
+
+    # Verificando o tipo de cada coluna
+    print(df.dtypes)
+    
 
 if __name__ == '__main__':
-    input_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/6028212.xlsx'
-    output_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/6028212_arrumado.xlsx'
+    input_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/06_teste_main_transpostas/03/6028212.xlsx'
+    output_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/6073087_arrumado.xlsx'
     organize_exams_code(input_file, output_file)
+    # print(verify_type(input_file))
