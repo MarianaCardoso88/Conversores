@@ -55,7 +55,7 @@ def transpose_exam(input_file_path, output_file_path):
         # Salvando o DataFrame modificado em um novo arquivo Excel
         df_transposto.to_excel(output_file_path, index=False)
 
-def organize_exams_code(input_file, output_file):
+def organize_exams(input_file, output_file):
     # Lendo o arquivo Excel
     df = pd.read_excel(input_file)
     
@@ -83,6 +83,9 @@ def organize_exams_code(input_file, output_file):
     # Remover espaços dos cabeçalhos
     df.columns = [col.replace(' ', '') for col in df.columns]
 
+    # Remover colunas cujo nome está inteiramente em caixa alta
+    df = df[[col for col in df.columns if not col.isupper()]]
+
     # Salvando o DataFrame modificado
     df.to_excel(output_file, index=False)
 
@@ -95,6 +98,6 @@ def verify_type(input_file):
     
 
 if __name__ == '__main__':
-    input_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/06_4_teste_main_organizados/03/6028212.xlsx'
+    input_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/06_3_transpostas/03/6028212.xlsx'
     output_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/6028212_teste.xlsx'
     organize_exams_code(input_file, output_file)
