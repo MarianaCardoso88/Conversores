@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 
 def remove_colunas_arquivo(input_file_path, output_file_path):
@@ -61,7 +62,7 @@ def organize_exams_code(input_file, output_file):
     # Salvando o cabeçalho da terceira coluna (Código do exame)
     third_col_header = df.columns[2]
 
-    # Atribuindo o cabeçalhos da terceira coluna como valor na terceira coluna, primeira linha
+    # Atribuindo o cabeçalhos da terceira coluna como valor na terceira coluna e primeira linha
     df.iat[0, 2] = pd.to_numeric(third_col_header, errors='coerce')
 
     # Acessa os nomes atuais das colunas
@@ -72,6 +73,15 @@ def organize_exams_code(input_file, output_file):
 
     # Atribui a lista modificada de volta a df.columns
     df.columns = nomes_atuais
+
+    # Pegando o nome do arquivo sem a extensão
+    nome_arquivo = os.path.splitext(os.path.basename(input_file))[0]
+
+    # Adicionando o nome do arquivo na coluna 'Atendimento'
+    df['Atendimento'] = nome_arquivo
+
+    # Remover espaços dos cabeçalhos
+    df.columns = [col.replace(' ', '') for col in df.columns]
 
     # Salvando o DataFrame modificado
     df.to_excel(output_file, index=False)
@@ -85,7 +95,6 @@ def verify_type(input_file):
     
 
 if __name__ == '__main__':
-    input_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/06_teste_main_transpostas/03/6028212.xlsx'
-    output_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/6073087_arrumado.xlsx'
+    input_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/06_4_teste_main_organizados/03/6028212.xlsx'
+    output_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/6028212_teste.xlsx'
     organize_exams_code(input_file, output_file)
-    # print(verify_type(input_file))
