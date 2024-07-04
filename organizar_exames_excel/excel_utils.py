@@ -83,9 +83,6 @@ def organize_exams(input_file, output_file):
     # Remover espaços dos cabeçalhos
     df.columns = [col.replace(' ', '') for col in df.columns]
 
-    # Remover colunas cujo nome está inteiramente em caixa alta
-    df = df[[col for col in df.columns if not col.isupper()]]
-
     # Salvando o DataFrame modificado
     df.to_excel(output_file, index=False)
 
