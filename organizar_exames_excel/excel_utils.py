@@ -92,9 +92,31 @@ def verify_type(input_file):
 
     # Verificando o tipo de cada coluna
     print(df.dtypes)
+
+def merge_excel_files(root_directory, output_file):
+    # Lista para armazenar os dataframes
+    dataframes = []
     
+    # Percorrer todos os arquivos e subpastas na pasta raiz
+    for subdir, _, files in os.walk(root_directory):
+        for file in files:
+            if file.endswith('.xlsx'):
+                file_path = os.path.join(subdir, file)
+                # Ler o arquivo Excel e adicionar ao dataframe
+                df = pd.read_excel(file_path)
+                dataframes.append(df)
+    
+    # Concatenar todos os dataframes
+    merged_df = pd.concat(dataframes, ignore_index=True)
+    
+    # Salvar o dataframe combinado em um novo arquivo Excel
+    merged_df.to_excel(output_file, index=False)
+    
+    return output_file
 
 if __name__ == '__main__':
-    input_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/06_3_transpostas/03/6028212.xlsx'
-    output_file = '/home/vini/Desktop/novosExamesUnivasOrganizados/6028212_teste.xlsx'
-    organize_exams_code(input_file, output_file)
+    # Organizando os códigos dos exames
+    input_path_arquivo_excel = input("Digite o caminho raiz dos arquivos excel organizados: ")
+    output_excel_mesclado = input("Digite o caminho para o excel mesclado: ")
+    merge_excel_files(input_path_arquivo_excel, output_excel_mesclado)
+    print("Arquivos mesclados com sucesso!")
