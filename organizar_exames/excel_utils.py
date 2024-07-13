@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import file_processing
 
 def remove_colunas_arquivo(input_file_path, output_file_path):
     # Lista das colunas a serem removidas
@@ -114,9 +115,24 @@ def merge_excel_files(root_directory, output_file):
     
     return output_file
 
+def verify_numbers_in_headers(input_file):
+    # Lendo o arquivo Excel
+    df = pd.read_excel(input_file, engine='openpyxl')
+
+    # Verificando se há números nas colunas
+    for col in df.columns:
+        if ".1" in col:
+            print(f"O arquivo {input_file} possui pelo uma coluna {col} com os caracteres '.1' no cabeçalho.")
+            continue
+
 if __name__ == '__main__':
-    # Organizando os códigos dos exames
-    input_path_arquivo_excel = input("Digite o caminho raiz dos arquivos excel organizados: ")
-    output_excel_mesclado = input("Digite o caminho para o excel mesclado: ")
-    merge_excel_files(input_path_arquivo_excel, output_excel_mesclado)
-    print("Arquivos mesclados com sucesso!")
+    # Mesclando os exames em um único excel
+    # input_path_arquivo_excel = input("Digite o caminho raiz dos arquivos excel organizados: ")
+    # output_excel_mesclado = input("Digite o caminho para o excel mesclado: ")
+    # merge_excel_files(input_path_arquivo_excel, output_excel_mesclado)
+    # print("Arquivos mesclados com sucesso!")
+
+    # Verificando cabeçalhos
+    input_path_diretorio_excel = input("Digite o caminho raiz dos arquivos excel organizados: ")
+    file_processing.verify_files(input_path_diretorio_excel, verify_numbers_in_headers)
+    print("Verificação concluída com sucesso")
