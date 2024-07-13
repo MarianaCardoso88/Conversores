@@ -1,6 +1,7 @@
 import os
 import chardet
 from openpyxl import Workbook
+import zipfile
 
 def txt_to_excel(input_folder_path, output_folder_path):
     # Criando arquivo de log para debug
@@ -26,7 +27,7 @@ def txt_to_excel(input_folder_path, output_folder_path):
             convert_to_txt(input_file_path, output_file_path)
 
             # Carregando o conteúdo do arquivo TXT
-            with open(input_file_path, 'r', encoding='ISO-8859-1') as file:
+            with open(input_file_path, 'r', encoding='utf-8') as file:
                 linhas = file.readlines()
 
             # Criando um novo arquivo Excel e escrevendo as linhas do arquivo TXT em colunas
@@ -103,6 +104,34 @@ def detect_encoding(file_path):
         detector.close()
     return detector.result['encoding']
 
+def is_valid_excel_file(file_path):
+    # Verifica se o arquivo tem extensão .xlsx ou .xls
+    if not file_path.endswith(('.xlsx', '.xls')):
+        return False
+    # Verifica se o arquivo pode ser aberto como um zip (apenas para arquivos .xlsx)
+    if file_path.endswith('.xlsx'):
+        try:
+            with zipfile.ZipFile(file_path, 'r') as zip_file:
+                pass
+        except zipfile.BadZipFile:
+            return False
+    return True
+
+def verify_files(input_folder_path, func):
+    """
+    Executa a função fornecida em cada arquivo dentro da pasta e subpastas.
+    :param input_folder_path: Caminho da pasta principal.
+    :param func: Função a ser executada em cada arquivo.
+    """
+    # Percorre a estrutura de diretórios recursivamente
+    for root, dirs, files in os.walk(input_folder_path):
+        for file in files:
+            caminho_completo = os.path.join(root, file)
+            if is_valid_excel_file(caminho_completo):
+                func(caminho_completo)
+            else:
+                print(f"Arquivo inválido ou corrompido: {caminho_completo}")
+
 def convert_to_float(value):
     value = value.replace(',', '.')
     try:
@@ -128,4 +157,4 @@ def convert_to_txt(input_file, output_file):
         txt_file.write(content)
 
 if __name__ == "__main__":
-    txt_to_excel('/home/vini/Desktop/novosExamesUnivasOrganizados/2024/teste/04', '/home/vini/Desktop/novosExamesUnivasOrganizados/2024/teste/04_excel')
+    print(detect_encoding('/home/vini/Desktop/ExamesUnivas03_06_2024_a_14_06_2024/06/06_2_txts_tratados/03/6028212'))
