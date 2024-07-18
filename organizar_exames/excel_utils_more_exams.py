@@ -1,5 +1,7 @@
 import pandas as pd
 import os
+import openpyxl
+import file_processing
 
 # A função transpõe apenas arquivos com um exame e armazena em log os arquivos que possuem mais de um exame
 def transpose_exam(input_file_path, output_file_path):
@@ -35,11 +37,14 @@ def organize_exams(input_file, output_file):
     df.to_excel(output_file, index=False)
 
 if __name__ == "__main__":
-    # Organizando os códigos dos exames
-    input_arquivo_excel = input("Digite o caminho do arquivo excel de entrada: ")
-    output_arquivo_transposto = input("Digite o caminho do arquivo excel a ser transposto: ")
-    transpose_exam(input_arquivo_excel, output_arquivo_transposto)
+    # Transpondo exames
+    input_caminho_excel_tratados = input("Digite o caminho do da pasta contendo o excel: ")
+    output_caminho_excel_transpostos = input("Digite o caminho da pasta de saída para os arquivos Excel transpostos: ")
+    file_processing.process_files(input_caminho_excel_tratados, output_caminho_excel_transpostos, transpose_exam)
     print("Transposição dos exames concluída.")
-    output_arquivo_organizado = input("Digite o caminho do arquivo excel a ser organizado ")
-    organize_exams(output_arquivo_transposto, output_arquivo_organizado)
+
+    # Organizando exames (removendo linhas do cabeçalho)
+    input_camino_excel_transpostos = output_caminho_excel_transpostos
+    output_caminho_excel_organizados = input("igite o caminho da pasta de saída para os arquivos Excel organizados: ")
+    file_processing.process_files(input_camino_excel_transpostos, output_caminho_excel_organizados, organize_exams)
     print("Organização dos exames concluída.")
