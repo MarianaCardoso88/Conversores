@@ -9,6 +9,13 @@ def remove_lines_with_keywords(input_file, output_file):
         for line in lines:
             if not any(keyword in line for keyword in keywords):
                 outfile.write(line)
+                
+def convert_to_utf8(input_file, output_file):
+    with open(input_file, 'r', encoding='ISO-8859-1') as infile:
+        content = infile.read()
+
+    with open(output_file, 'w', encoding='UTF-8') as outfile:
+        outfile.write(content)
 
 if __name__ == '__main__':
     input_file_txt = input("Digite o caminho raiz dos arquivos txt organizados por dia: ")
