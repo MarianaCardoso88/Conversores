@@ -28,8 +28,9 @@ def count_exams(file_path):
     # Contando quantos são inteiros
     return numeros_inteiros.sum()
 
-# A função transpõe apenas arquivos com um exame e armazena em log os arquivos que possuem mais de um exame
-def transpose_exam(input_file_path, output_file_path):
+
+# A função transpõe apenas arquivos com uma prescrição e armazena em log os arquivos que possuem mais de uma prescrição
+def transpose_exam_one_prescription(input_file_path, output_file_path):
     # Lendo o arquivo Excel
     df = pd.read_excel(input_file_path)
     number_of_exams = count_exams(input_file_path)
@@ -56,7 +57,7 @@ def transpose_exam(input_file_path, output_file_path):
         # Salvando o DataFrame modificado em um novo arquivo Excel
         df_transposto.to_excel(output_file_path, index=False)
 
-def organize_exams(input_file, output_file):
+def organize_exams_one_prescription(input_file, output_file):
     # Lendo o arquivo Excel
     df = pd.read_excel(input_file)
     
@@ -86,6 +87,78 @@ def organize_exams(input_file, output_file):
 
     # Salvando o DataFrame modificado
     df.to_excel(output_file, index=False)
+
+def organize_exams(input_file, output_file):
+    # Lendo arquivo excel
+    df = pd.read_excel(input_file)
+    number_of_exams = count_exams(input_file)
+
+    # Contagem de arquivos com mais de uma prescrição para logs
+    if (number_of_exams == 0 or number_of_exams > 1):
+        # Adicionando o caminho do arquivo ao arquivo de log
+        with open("./logs/arquivos_com_mais_de_um_exame.log", 'a') as arquivo_log:
+            arquivo_log.write(input_file + "\n")
+
+    # Armazenando headers em uma lista
+    headers = df.columns.values
+
+    # Data que não está alinhada no excel
+    data_presc_1 = headers[5]
+
+    # Armazena os índices das prescrições em uma lista
+    indices_presc = df.loc[df.iloc[:, 0].apply(type) == int].index
+
+    # Armazena as prescrições em uma lista
+    prescs = list(df.loc[indices_presc, 'Exame'])
+
+    # Armazena as datas que estão alinhadas em uma lista
+    datas =  list(df.loc[indices_presc, 'Unidade'])
+
+    # Armazena as datas em uma lista
+    datas.pop(-1)
+    datas.append(data_presc_1)
+
+    # Armazena na variável o nome do arquivo
+    nome_arquivo = os.path.splitext(os.path.basename(input_file))[0]
+
+    # Criando lista para adicionar o atendimento em cada exame
+    atends = []
+    for i in range(len(prescs)):
+        atends.append(int(nome_arquivo))
+
+    # Lista das colunas a serem removidas
+    colunas_para_remover = ['Unidade', 'Referência', 'Material', 'Método']
+    # Removendo as colunas especificadas
+    df_modificado = df.drop(columns=colunas_para_remover, errors='ignore')
+    
+
+    # Criando linhas com prescrições, atendimentos e datas organizados
+    novas_linhas = pd.DataFrame({
+        'Exame': [0]
+    })
+    novas_linhas = pd.concat([novas_linhas, pd.DataFrame([datas])], ignore_index=True)
+    novas_linhas = pd.concat([novas_linhas, pd.DataFrame([atends])], ignore_index=True)
+    novas_linhas = pd.concat([novas_linhas, pd.DataFrame([prescs])], ignore_index=True)
+
+
+    # Dividindo o DataFrame original
+    parte2 = df_modificado.iloc[indices_presc[-1] + 1:, :]
+    parte2.columns = range(parte2.shape[1])
+
+    # Alterando o cabeçalho para não ter problema de paridade
+    novas_linhas.columns = range(novas_linhas.shape[1])
+    df_organizado = pd.concat([novas_linhas, parte2], ignore_index=True)
+    df_transposto = df_organizado.T
+
+    # Organizando cabeçalho
+    df_transposto.columns = df_transposto.iloc[0]
+    df_transposto = df_transposto[1:]
+    df_transposto = df_transposto.drop(df_transposto.columns[0], axis=1)
+    df_transposto.columns = ['Data', 'Atendimento', 'Prescrição'] + list(df_transposto.columns[3:])
+    df_transposto.columns = [col.replace(' ', '') for col in df_transposto.columns]
+
+    # Salvando o DataFrame modificado em um novo arquivo Excel
+    df_transposto.to_excel(output_file, index=False)
 
 def verify_type(input_file):
     # Lendo o arquivo Excel
@@ -127,12 +200,12 @@ def verify_numbers_in_headers(input_file):
 
 if __name__ == '__main__':
     # Mesclando os exames em um único excel
-    # input_path_arquivo_excel = input("Digite o caminho raiz dos arquivos excel organizados: ")
-    # output_excel_mesclado = input("Digite o caminho para o excel mesclado: ")
-    # merge_excel_files(input_path_arquivo_excel, output_excel_mesclado)
-    # print("Arquivos mesclados com sucesso!")
+    input_path_arquivo_excel = input("Digite o caminho raiz dos arquivos excel organizados: ")
+    output_excel_mesclado = input("Digite o caminho para o excel mesclado: ")
+    merge_excel_files(input_path_arquivo_excel, output_excel_mesclado)
+    print("Arquivos mesclados com sucesso!")
 
     # Verificando cabeçalhos
-    input_path_diretorio_excel = input("Digite o caminho raiz dos arquivos excel organizados: ")
-    file_processing.verify_files(input_path_diretorio_excel, verify_numbers_in_headers)
-    print("Verificação concluída com sucesso")
+    # input_path_diretorio_excel = input("Digite o caminho raiz dos arquivos excel organizados: ")
+    # file_processing.verify_files(input_path_diretorio_excel, verify_numbers_in_headers)
+    # print("Verificação concluída com sucesso")
