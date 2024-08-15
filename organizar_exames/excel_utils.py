@@ -196,7 +196,7 @@ def verify_numbers_in_headers(input_file):
     # Verificando se há números nas colunas
     for col in df.columns:
         if ".1" in col:
-            print(f"O arquivo {input_file} possui pelo uma coluna {col} com os caracteres '.1' no cabeçalho.")
+            print(f"O arquivo {input_file} possui pelo menos uma coluna {col} com os caracteres '.1' no cabeçalho.")
             continue
 
 if __name__ == '__main__':
@@ -207,12 +207,12 @@ if __name__ == '__main__':
     # print("Arquivos mesclados com sucesso!")
 
     # Verificando cabeçalhos
-    # input_path_diretorio_excel = input("Digite o caminho raiz dos arquivos excel organizados: ")
-    # file_processing.verify_files(input_path_diretorio_excel, verify_numbers_in_headers)
-    # print("Verificação concluída com sucesso")
+    input_path_diretorio_excel = input("Digite o caminho raiz dos arquivos excel organizados: ")
+    file_processing.verify_files(input_path_diretorio_excel, verify_numbers_in_headers)
+    print("Verificação concluída com sucesso")
 
     # Organizando exames
-    input_arquivo_excel = "5795083.xlsx"
-    output_excel_organizado = "5795083-organizado.xlsx"
-    organize_exams(input_arquivo_excel, output_excel_organizado)
-    print("Arquivo organizado")
+    # input_arquivo_excel = "5795083.xlsx"
+    # output_excel_organizado = "5795083-organizado.xlsx"
+    # organize_exams(input_arquivo_excel, output_excel_organizado)
+    # print("Arquivo organizado")
