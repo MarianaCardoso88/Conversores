@@ -103,7 +103,7 @@ def organize_exams(input_file, output_file):
     headers = df.columns.values
 
     # Data que não está alinhada no excel
-    data_presc_1 = headers[5]
+    data_presc_last = headers[5]
 
     # Armazena os índices das prescrições em uma lista
     indices_presc = df.loc[df.iloc[:, 0].apply(type) == int].index
@@ -116,7 +116,8 @@ def organize_exams(input_file, output_file):
 
     # Armazena as datas em uma lista
     datas.pop(-1)
-    datas.append(data_presc_1)
+
+    datas = [data_presc_last] + datas
 
     # Armazena na variável o nome do arquivo
     nome_arquivo = os.path.splitext(os.path.basename(input_file))[0]
@@ -200,12 +201,18 @@ def verify_numbers_in_headers(input_file):
 
 if __name__ == '__main__':
     # Mesclando os exames em um único excel
-    input_path_arquivo_excel = input("Digite o caminho raiz dos arquivos excel organizados: ")
-    output_excel_mesclado = input("Digite o caminho para o excel mesclado: ")
-    merge_excel_files(input_path_arquivo_excel, output_excel_mesclado)
-    print("Arquivos mesclados com sucesso!")
+    # input_path_arquivo_excel = "./5795083.xlsx"
+    # output_excel_mesclado = "./5795083-MESCLADO.xlsx"
+    # merge_excel_files(input_path_arquivo_excel, output_excel_mesclado)
+    # print("Arquivos mesclados com sucesso!")
 
     # Verificando cabeçalhos
     # input_path_diretorio_excel = input("Digite o caminho raiz dos arquivos excel organizados: ")
     # file_processing.verify_files(input_path_diretorio_excel, verify_numbers_in_headers)
     # print("Verificação concluída com sucesso")
+
+    # Organizando exames
+    input_arquivo_excel = "5795083.xlsx"
+    output_excel_organizado = "5795083-organizado.xlsx"
+    organize_exams(input_arquivo_excel, output_excel_organizado)
+    print("Arquivo organizado")
