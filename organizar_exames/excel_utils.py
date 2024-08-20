@@ -155,7 +155,7 @@ def organize_exams(input_file, output_file):
     df_transposto.columns = df_transposto.iloc[0]
     df_transposto = df_transposto[1:]
     df_transposto = df_transposto.drop(df_transposto.columns[0], axis=1)
-    df_transposto.columns = ['Data', 'Atendimento', 'Prescrição'] + list(df_transposto.columns[3:])
+    df_transposto.columns = ['Data', 'Atendimento', 'Código'] + list(df_transposto.columns[3:])
     df_transposto.columns = [col.replace(' ', '') for col in df_transposto.columns]
 
     # Salvando o DataFrame modificado em um novo arquivo Excel
