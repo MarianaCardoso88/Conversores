@@ -201,10 +201,10 @@ def verify_numbers_in_headers(input_file):
 
 if __name__ == '__main__':
     # Mesclando os exames em um único excel
-    # input_path_arquivo_excel = "/home/vini/Desktop/pareamento/pareamento-09-2023/5.excel_organizados"
-    # output_excel_mesclado = "/home/vini/Desktop/pareamento/pareamento-09-2023/exames_univas.xlsx"
-    # merge_excel_files(input_path_arquivo_excel, output_excel_mesclado)
-    # print("Arquivos mesclados com sucesso!")
+    input_path_arquivo_excel = "/home/vini/Desktop/pareamento/pareamento-09-2023/5.excel_organizados"
+    output_excel_mesclado = "/home/vini/Desktop/pareamento/pareamento-09-2023/exames_univas.xlsx"
+    merge_excel_files(input_path_arquivo_excel, output_excel_mesclado)
+    print("Arquivos mesclados com sucesso!")
 
     # Verificando números nos cabeçalhos
     # input_path_diretorio_excel = "/home/vini/Desktop/pareamento/pareamento-09-2023/5.excel_organizados"
@@ -218,6 +218,6 @@ if __name__ == '__main__':
     # print("Arquivo organizado")
 
     # Verificando tipos das colunas
-    espectros = "/home/vini/Desktop/pareamento/pareamento-09-2023/espectros_2023_setembro.csv"
-    exames_univas = "/home/vini/Desktop/pareamento/pareamento-09-2023/exames_univas.xlsx"
-    verify_type(exames_univas)
+    # espectros = "/home/vini/Desktop/pareamento/pareamento-09-2023/espectros_2023_setembro.csv"
+    # exames_univas = "/home/vini/Desktop/pareamento/pareamento-09-2023/exames_univas.xlsx"
+    # verify_type(exames_univas)
