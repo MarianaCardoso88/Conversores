@@ -163,7 +163,7 @@ def organize_exams(input_file, output_file):
 
 def verify_type(input_file):
     # Lendo o arquivo Excel
-    df = pd.read_excel(input_file)
+    df = pd.read_excel(input_file, engine="openpyxl")
 
     # Verificando o tipo de cada coluna
     print(df.dtypes)
@@ -201,18 +201,23 @@ def verify_numbers_in_headers(input_file):
 
 if __name__ == '__main__':
     # Mesclando os exames em um único excel
-    # input_path_arquivo_excel = "./5795083.xlsx"
-    # output_excel_mesclado = "./5795083-MESCLADO.xlsx"
+    # input_path_arquivo_excel = "/home/vini/Desktop/pareamento/pareamento-09-2023/5.excel_organizados"
+    # output_excel_mesclado = "/home/vini/Desktop/pareamento/pareamento-09-2023/exames_univas.xlsx"
     # merge_excel_files(input_path_arquivo_excel, output_excel_mesclado)
     # print("Arquivos mesclados com sucesso!")
 
-    # Verificando cabeçalhos
-    input_path_diretorio_excel = input("Digite o caminho raiz dos arquivos excel organizados: ")
-    file_processing.verify_files(input_path_diretorio_excel, verify_numbers_in_headers)
-    print("Verificação concluída com sucesso")
+    # Verificando números nos cabeçalhos
+    # input_path_diretorio_excel = "/home/vini/Desktop/pareamento/pareamento-09-2023/5.excel_organizados"
+    # file_processing.verify_files(input_path_diretorio_excel, verify_numbers_in_headers)
+    # print("Verificação concluída com sucesso")
 
     # Organizando exames
-    # input_arquivo_excel = "5795083.xlsx"
-    # output_excel_organizado = "5795083-organizado.xlsx"
+    # input_arquivo_excel = "5785692.xlsx"
+    # output_excel_organizado = "1.5785692-organizado.xlsx"
     # organize_exams(input_arquivo_excel, output_excel_organizado)
     # print("Arquivo organizado")
+
+    # Verificando tipos das colunas
+    espectros = "/home/vini/Desktop/pareamento/pareamento-09-2023/espectros_2023_setembro.csv"
+    exames_univas = "/home/vini/Desktop/pareamento/pareamento-09-2023/exames_univas.xlsx"
+    verify_type(exames_univas)
