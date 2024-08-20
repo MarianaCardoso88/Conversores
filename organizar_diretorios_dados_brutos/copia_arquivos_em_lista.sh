@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Como rodar
+# ./copia_arquivos_em_lista.sh /caminho/arquivo/leitura /caminho/diretorio/saída
+
 # Verifica se o arquivo de lista de caminhos foi fornecido
 if [ $# -ne 2 ]; then
   echo "Uso: $0 <arquivo_de_lista.txt> <diretorio_destino>"
