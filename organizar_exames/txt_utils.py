@@ -25,8 +25,6 @@ def convert_to_utf8_if_needed(input_file, output_file):
         result = chardet.detect(raw_data)
         encoding = result['encoding']
     
-    print(f'Encoding detectado: {encoding}')
-    
     # Se o encoding for ISO-8859-1, converte para UTF-8
     if encoding == 'ISO-8859-1':
         with open(input_file, 'r', encoding='ISO-8859-1') as infile:
