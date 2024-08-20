@@ -28,7 +28,7 @@ if __name__ == "__main__":
     print("Convertendo TXTs ISO-8859-1 para UTF-8...")
     input_path_dados_brutos = input_path_raiz_dados + "/0.brutos"
     output_txt_utf8 = input_path_raiz_dados + "/1.TXTs_utf-8"
-    file_processing.process_files(input_path_dados_brutos, output_txt_utf8, txt_utils.convert_to_utf8)
+    file_processing.process_files(input_path_dados_brutos, output_txt_utf8, txt_utils.convert_to_utf8_if_needed)
     print("TXTs convertidos para UTF-8")
 
     # Tratar Gasometrias e tipo de sangue venoso e arterial
