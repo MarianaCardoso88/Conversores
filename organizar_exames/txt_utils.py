@@ -1,4 +1,5 @@
 import file_processing
+import chardet
 
 def remove_lines_with_keywords(input_file, output_file):
     keywords = ['Globulinas', 'urina', 'fezes', 'Urina', 'Fezes', 'URINA', 'FEZES', 'BIOQUÍMICA', 'HEMATOLOGIA', 'UROANÁLISE', 'MICROBIOLOGIA', 'Antibiograma', 'Pesquisa de BAAR', 'Bacterioscopia', 'Cultura', 'Hemocultura', 'HERMES PARDINI', 'Tacrolimus', 'Brucelose', 'Citomegalovirus', 'Hepatite', 'HIV', 'HTLV', 'Trypanosoma', 'IMUNOLOGIA', 'VDRL', 'ABO-RhD', 'Fator Rh', 'Pesquisa de D fraco', '%', 'LAB. APOIO DB', 'Relação TTPA/Controle', 'Glicemia Média Estimada', 'HEMODIÁLISE', 'PARASITOLOGIA']
@@ -16,6 +17,32 @@ def convert_to_utf8(input_file, output_file):
 
     with open(output_file, 'w', encoding='UTF-8') as outfile:
         outfile.write(content)
+
+def convert_to_utf8_if_needed(input_file, output_file):
+    # Detecta o encoding do arquivo de entrada
+    with open(input_file, 'rb') as infile:
+        raw_data = infile.read()
+        result = chardet.detect(raw_data)
+        encoding = result['encoding']
+    
+    print(f'Encoding detectado: {encoding}')
+    
+    # Se o encoding for ISO-8859-1, converte para UTF-8
+    if encoding == 'ISO-8859-1':
+        with open(input_file, 'r', encoding='ISO-8859-1') as infile:
+            content = infile.read()
+
+        with open(output_file, 'w', encoding='UTF-8') as outfile:
+            outfile.write(content)
+    # Se o encoding já for UTF-8, apenas copia o conteúdo
+    elif encoding == 'UTF-8' or encoding == 'utf-8':
+        with open(input_file, 'r', encoding='UTF-8') as infile:
+            content = infile.read()
+
+        with open(output_file, 'w', encoding='UTF-8') as outfile:
+            outfile.write(content)
+    else:
+        print(f'Encoding {encoding} do arquivo {input_file} não suportado no código atual.')
 
 def changing_gasometrias_exams_strings(input_file, output_file):
     keyword = 'GASOMETRIAS'
@@ -58,13 +85,29 @@ def changing_gasometrias_exams_strings(input_file, output_file):
                 outfile.write(lines[i])
                 i += 1
 
+def detect_encoding(file_path):
+    encoding = 'ISO-8859-1'  # Defina um encoding padrão
+    with open(file_path, 'rb') as f:
+        raw_data = f.read()
+        result = chardet.detect(raw_data)
+        detected_encoding = result['encoding']
+        confidence = result['confidence']
+        if detected_encoding and confidence > 0.9:
+            encoding = detected_encoding
+        return encoding
+
 
 if __name__ == '__main__':
     # input_file_txt = input("Digite o caminho raiz dos arquivos txt organizados por dia: ")
     # output_txt_sem_linhas_inuteis = input("Digite o caminho para o txt sem linhas inúteis: ")
     # file_processing.process_files(input_file_txt, output_txt_sem_linhas_inuteis, remove_lines_with_keywords)
     # print("Linhas removidas com sucesso!")]
-    input_file_txt = "./7516347_utf8"
-    output_file_txt = "./7516347_tratado"
-    changing_gasometrias_exams_strings(input_file_txt, output_file_txt)
+    
+    # input_file_txt = "./7516347_utf8"
+    # output_file_txt = "./7516347_tratado"
+    # changing_gasometrias_exams_strings(input_file_txt, output_file_txt)
+    # print('finalizado')
+
+    input_file_txt = "/home/vini/Desktop/pareamento/pareamento-09-2023/1.TXTs_utf-8/22/5792118"
+    print(detect_encoding(input_file_txt))
     print('finalizado')
