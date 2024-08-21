@@ -6,9 +6,9 @@
 # - Para arquivos com mais de uma data o script adiciona ele em pastas de datas diferentes, ou seja, o dado é duplicado.
 
 # Caminho base onde estão localizadas as pastas originais
-BASE_PATH="/home/vini/Desktop/pareamento/brutos-desorganizados"
+BASE_PATH="/home/vini/Desktop/dev shell arquivos univas/brutos"
 # Caminho onde queremos criar as novas pastas organizadas por data
-OUTPUT_BASE_PATH="/home/vini/Desktop/pareamento/brutos-organizados"
+OUTPUT_BASE_PATH="/home/vini/Desktop/dev shell arquivos univas/brutos-organizados"
 
 # Função para organizar arquivos por data
 organizar_arquivos_por_data() {
@@ -27,49 +27,60 @@ organizar_arquivos_por_data() {
 
 		# Verificar se alguma data foi encontrada
 		if [[ -n $datas_formatadas ]]; then
-			# Processar cada data encontrada
-			echo "$datas_formatadas" | while read -r data_formatada; do
-				# Extrair dia, mês e ano
-				dia=$(echo "$data_formatada" | cut -d'/' -f1)
-				mes=$(echo "$data_formatada" | cut -d'/' -f2)
-				ano="20$(echo "$data_formatada" | cut -d'/' -f3)"
-				data="$ano/$mes/$dia"
+			# Pegar a primeira data encontrada
+            primeira_data=$(echo "$datas_formatadas" | head -n 1)
 
-				# Criar o caminho da nova pasta baseado na data
-				nova_pasta="$output_base_path/$data"
-				mkdir -p "$nova_pasta"
+			# Extrair dia, mês e ano
+			dia=$(echo "$primeira_data" | cut -d'/' -f1)
+			mes=$(echo "$primeira_data" | cut -d'/' -f2)
+			ano="20$(echo "$primeira_data" | cut -d'/' -f3)"
+			data="$ano/$mes/$dia"
 
-				# Armazena o nome do arquivo e o caminho em variáveis
-				base_name=$(basename "$file_path")
-				dest_path="$nova_pasta/$base_name"
+			# Criar o caminho da nova pasta baseado na data
+			nova_pasta="$output_base_path/$data"
+			mkdir -p "$nova_pasta"
 
-				# Calcular o hash do arquivo atual
-				current_hash=$(md5sum "$file_path" | awk '{ print $1 }')
+			# Armazena o nome do arquivo e o caminho em variáveis
+			base_name=$(basename "$file_path")
+			dest_path="$nova_pasta/$base_name"
 
-				# Verificar se já existe um arquivo com o mesmo hash na pasta de destino
-				if [[ -e $dest_path ]]; then
-					existing_hash=$(md5sum "$dest_path" | awk '{ print $1 }')
+			# Calcular o hash do arquivo atual
+			current_hash=$(md5sum "$file_path" | awk '{ print $1 }')
+
+			# Verificar se já existe algum arquivo com o mesmo hash na pasta de destino
+			duplicate_found=false
+			for existing_file in "$nova_pasta"/*; do
+				if [[ -f "$existing_file" ]]; then
+					existing_hash=$(md5sum "$existing_file" | awk '{ print $1 }')
 					if [[ $current_hash == $existing_hash ]]; then
-						echo "Arquivo duplicado encontrado: $file_path não foi copiado para $nova_pasta/ pois já existe um arquivo idêntico."
-						continue
-					else
-						count=1
-						while [[ -e "${dest_path}_$count" ]]; do
-							existing_hash=$(md5sum "${dest_path}_$count" | awk '{ print $1 }')
-							if [[ $current_hash == $existing_hash ]]; then
-								echo "Arquivo duplicado encontrado: $file_path não foi copiado para $nova_pasta/ pois já existe um arquivo idêntico."
-								continue 2
-							fi
-							((count++))
-						done
-						dest_path="${dest_path}_$count"
+						echo "Arquivo duplicado encontrado: $file_path não foi copiado para $nova_pasta/ pois já existe um arquivo idêntico com o nome $existing_file."
+						duplicate_found=true
+						break
 					fi
 				fi
+			done
+
+			# Se um arquivo duplicado foi encontrado pular ele
+            if [[ $duplicate_found == true ]]; then
+                continue
+            fi
+
+			# Verificar se já existe um arquivo com o mesmo nome na pasta de destino
+			if [[ -e $dest_path ]]; then
+				count=1
+				while [[ -e "${dest_path}_$count" ]]; do
+					((count++))
+				done
+				dest_path="${dest_path}_$count"
 
 				# Copiar o arquivo para a nova pasta com o novo nome
 				cp "$file_path" "$dest_path"
 				echo "Copiado $file_path para $nova_pasta/"
-			done
+			else
+				# Copiar o arquivo para a nova pasta com o novo nome
+				cp "$file_path" "$dest_path"
+				echo "Copiado $file_path para $nova_pasta/"
+			fi
 		else
 			echo "Nenhuma data encontrada no formato DD/MM/YY no arquivo $file_path"
 		fi
