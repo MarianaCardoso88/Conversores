@@ -73,7 +73,7 @@ if __name__ == "__main__":
         parear = input("deseja parear os arquivos da univas mesclados com os espectros? sim/não: ").strip().lower()
         if parear == "sim":
             input_espectros = input("Insira o caminho para o arquivo csv contendo os espectros do Progenos: ")
-            pair.pair(input_path_raiz_dados + "/exames_univas.xlsx", input_espectros, input_path_raiz_dados + "/pareados.xlsx")
+            pair.pair(input_espectros, input_path_raiz_dados + "/exames_univas.xlsx", input_path_raiz_dados + "/pareados.xlsx")
             print("Exames pareados")
             break
         elif parear == "não":
