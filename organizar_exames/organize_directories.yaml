@@ -1,10 +1,9 @@
-name: OrganizingDirectories
+name: OrganizeExams
 channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.12
-  - jupyterlab
+  - python=3.12.2
   - numpy
   - pandas
   - matplotlib
