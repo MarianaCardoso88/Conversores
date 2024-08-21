@@ -10,7 +10,7 @@ def detect_encoding(file_path):
         
 
 def pair(file_spectra, file_univas, file_output_pareado):
-    espectros = pd.read_csv(file_spectra)
+    espectros = pd.read_csv(file_spectra, encoding="utf-8")
     exames_univas = pd.read_excel(file_univas)
 
     espectros["Código"] = espectros["Código"].astype(str)
