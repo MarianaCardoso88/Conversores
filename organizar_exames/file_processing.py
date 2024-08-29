@@ -1,3 +1,28 @@
+'''
+Este módulo contém funções utilitárias que organizam e analisam arquivos.
+
+
+Funções principais:
+
+- txt_to_excel: dado uma pasta raíz de entrada e uma pasta como saída a função converte os arquivos TXTs em Excel sem excluir os TXTs.
+    A função também cria um arquivo de logs na pasta ./logs para vizualização caso alguma inconsistência ocorra.
+    :param input_dir: Caminho para a pasta de entrada.
+    :param output_dir: Caminho para a pasta de saída.
+
+-process_files: Processa todos os arquivos em uma pasta de entrada, aplica uma função a cada um e salva os arquivos processados na pasta de saída, mantendo
+ a estrutura de diretórios.
+    Também possui um sistema de logs na pasta ./logs
+    :param input_dir: Caminho para a pasta de entrada.
+    :param output_dir: Caminho para a pasta de saída.
+    :param func: Função a ser aplicada em cada arquivo - esta função precisa retornar true ou false.
+
+- varify_files: Executa a função fornecida em cada arquivo dentro da pasta e subpastas.
+    :param input_folder_path: Caminho da pasta principal.
+    :param func: Função a ser executada em cada arquivo.
+
+'''
+
+
 import os
 import chardet
 from openpyxl import Workbook
@@ -50,14 +75,6 @@ def txt_to_excel(input_folder_path, output_folder_path):
 
 # Dado um diretório de entrada e um diretório de saída, passa a função func em cada arquivo do diretório de entrada e salva o resultado no diretório de saída.
 def process_files(input_dir, output_dir, func):
-    """
-    Processa todos os arquivos em uma pasta de entrada, aplica uma função a cada um
-    e salva os arquivos processados na pasta de saída, mantendo a estrutura de diretórios.
-
-    :param input_dir: Caminho para a pasta de entrada.
-    :param output_dir: Caminho para a pasta de saída.
-    :param func: Função a ser aplicada em cada arquivo - esta função precisa retornar true ou false.
-    """
 
     # Criando arquivo de log para debug
     caminho_para_o_arquivo_de_log = "./logs/" + func.__name__ + '.log'
@@ -118,11 +135,6 @@ def is_valid_excel_file(file_path):
     return True
 
 def verify_files(input_folder_path, func):
-    """
-    Executa a função fornecida em cada arquivo dentro da pasta e subpastas.
-    :param input_folder_path: Caminho da pasta principal.
-    :param func: Função a ser executada em cada arquivo.
-    """
     # Percorre a estrutura de diretórios recursivamente
     for root, dirs, files in os.walk(input_folder_path):
         for file in files:
