@@ -6,9 +6,9 @@
 # - Para arquivos com mais de uma data o script adiciona ele em pastas de datas diferentes, ou seja, o dado é duplicado.
 
 # Caminho base onde estão localizadas as pastas originais
-BASE_PATH="/home/vini/Desktop/dev shell arquivos univas/brutos"
+BASE_PATH="/home/vini/Desktop/pareamento/brutos-desorganizados"
 # Caminho onde queremos criar as novas pastas organizadas por data
-OUTPUT_BASE_PATH="/home/vini/Desktop/dev shell arquivos univas/brutos-organizados"
+OUTPUT_BASE_PATH="/home/vini/Desktop/pareamento/brutos-organizados"
 
 # Função para organizar arquivos por data
 organizar_arquivos_por_data() {
@@ -18,7 +18,7 @@ organizar_arquivos_por_data() {
 	# Percorrer todas as pastas e arquivos no diretório base
 	find "$base_path" -type f | while read -r file_path; do
 		# Ignorar arquivos com extensões específicas
-		if [[ $file_path == *.db || $file_path == *.jpeg || $file_path == *.pptx || $file_path == *.mp4 ]]; then
+		if [[ $file_path == *.db || $file_path == *.jpeg || $file_path == *.pptx || $file_path == *.mp4 || $file_path == *.csv || $file_path == *.xlsx || $file_path == *.pdf ]]; then
 			echo "Arquivo $file_path não pasosu na verificação de extensão"
 			continue
 		fi
