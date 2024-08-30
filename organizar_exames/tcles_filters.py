@@ -20,6 +20,7 @@ os TCLEs que não possuem exames.
     dados pareados;
     :param tabela_prescricao_atendimento: caminho arquivo de 
     entrada para filtro com as prescrições dos TCLEs;
+    :param file_diferenca: caminho arquivo da diferença entre as planilhas;
 """
 
 import pandas as pd
@@ -32,12 +33,12 @@ def filter(dados_pareados, tabela_prescricao_atendimento, data_set):
 
     df_filtrado.to_excel(data_set, index=False)
 
-def reexport(dados_pareados, tabela_prescricao_atendimento):
+def reexport(dados_pareados, tabela_prescricao_atendimento, file_diferenca):
     pareados = pd.read_excel(dados_pareados)
     prescricao_atendimento = pd.read_excel(tabela_prescricao_atendimento)
 
     diferenca = prescricao_atendimento[~prescricao_atendimento['Prescrição'].isin(pareados['Código'])]
-    diferenca.to_excel("tcles_sem_exames.xlsx", index=False)
+    diferenca.to_excel(file_diferenca, index=False)
 
 
 if __name__ == '__main__':
