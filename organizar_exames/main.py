@@ -3,6 +3,7 @@ import file_processing
 import excel_utils
 import txt_utils
 import pair
+import tcles_filters
 
 def clean_logs():
     directory_path = "./logs"
@@ -57,28 +58,45 @@ if __name__ == "__main__":
 
     # Mesclar arquivos xlsx
     while True:
-        mesclar = input("deseja mesclar todos os arquivos excel em um só arquivo? sim/não: ").strip().lower()
+        mesclar = input("Deseja mesclar todos os arquivos excel em um só arquivo? sim/não: ").strip().lower()
         if mesclar == "sim":
             excel_utils.merge_excel_files(output_path_arquivos_organizados,input_path_raiz_dados + "/exames_univas.xlsx")
             print("Arquivos mesclados")
             break
         elif mesclar == "não":
-            print("arquivos não mesclados")
+            print("Arquivos não mesclados")
             break
         else:
             print("Resposta inválida. Por favor, digite 'sim' ou 'não'.")
 
     # Parear arquivos univas progenos
     while True:
-        parear = input("deseja parear os arquivos da univas mesclados com os espectros? sim/não: ").strip().lower()
+        parear = input("Deseja parear os exames da univas com os espectros? sim/não: ").strip().lower()
         if parear == "sim":
             input_espectros = input("Insira o caminho para o arquivo csv contendo os espectros do Progenos: ")
             pair.pair(input_espectros, input_path_raiz_dados + "/exames_univas.xlsx", input_path_raiz_dados + "/pareados.xlsx")
             print("Exames pareados")
             break
         elif parear == "não":
-            print("exames não pareados")
+            print("Exames não pareados")
             break
         else:
             print("Resposta inválida. Por favor, digite 'sim' ou 'não'.")
         
+    # Filtrar pareados com TCLEs
+    if (parear == "sim"):
+        while True:
+            filtrar = input("Deseja filtrar os exames pareados baseado nos TCLEs? sim/não: ").strip().lower()
+            if filtrar == "sim":
+                input_tecles = input("Insira o caminho para o arquivo xlsx contendo os TCLEs ")
+                tcles_filters.filter(input_path_raiz_dados + "/pareados.xlsx", input_tecles, input_path_raiz_dados + "/data_set.xlsx")
+                print("Exames filtrados com base nos TCLEs salvo em " + input_path_raiz_dados + "/data_set.xlsx")
+                tcles_filters.reexport(input_path_raiz_dados + "/pareados.xlsx", input_tecles, input_path_raiz_dados + "tcles_sem_exames.xlsx")
+                print("Diferença dos TCLEs com data_set salvo em " + input_path_raiz_dados + " tcles_sem_exames.xlsx")
+                break
+            elif filtrar == "não":
+                print("Dados não filtrados")
+                break
+            else:
+                print("Resposta inválida. Por favor, digite 'sim' ou 'não'.")
+            
