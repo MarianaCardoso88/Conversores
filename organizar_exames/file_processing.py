@@ -75,6 +75,9 @@ def txt_to_excel(input_folder_path, output_folder_path):
 
 # Dado um diretório de entrada e um diretório de saída, passa a função func em cada arquivo do diretório de entrada e salva o resultado no diretório de saída.
 def process_files(input_dir, output_dir, func):
+    # Código de cor para print
+    BLUE = "\033[94m"
+    RESET = "\033[0m" # O reset é usado para não fazer todos os prints ficarem em azul
 
     # Criando arquivo de log para debug
     caminho_para_o_arquivo_de_log = "./logs/" + func.__name__ + '.log'
@@ -103,6 +106,7 @@ def process_files(input_dir, output_dir, func):
                 os.makedirs(output_file_dir)
 
             # Aplica a função ao arquivo de entrada
+            print(f"{BLUE}Processando arquivo {output_file_path}{RESET}")
             if (func(input_file_path, output_file_path)):
                 # Abrindo o arquivo de log em modo de adição e adicionando a mensagem
                 with open(caminho_para_o_arquivo_de_log, 'a') as arquivo_log:
