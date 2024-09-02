@@ -92,11 +92,12 @@ if __name__ == "__main__":
                 tcles_filters.filter(input_path_raiz_dados + "/pareados.xlsx", input_tecles, input_path_raiz_dados + "/data_set.xlsx")
                 print("Exames filtrados com base nos TCLEs salvo em " + input_path_raiz_dados + "/data_set.xlsx")
                 tcles_filters.reexport(input_path_raiz_dados + "/pareados.xlsx", input_tecles, input_path_raiz_dados + "tcles_sem_exames.xlsx")
-                print("Diferença dos TCLEs com data_set salvo em " + input_path_raiz_dados + " tcles_sem_exames.xlsx")
+                print("Diferença dos TCLEs com data_set salvo em " + input_path_raiz_dados + "/tcles_sem_exames.xlsx")
                 break
             elif filtrar == "não":
                 print("Dados não filtrados")
                 break
             else:
                 print("Resposta inválida. Por favor, digite 'sim' ou 'não'.")
-            
+
+    # Implementar alteração dos cabeçalhos VGM, HGM, CHGM
