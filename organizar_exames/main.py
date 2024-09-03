@@ -60,7 +60,16 @@ if __name__ == "__main__":
     while True:
         mesclar = input("Deseja mesclar todos os arquivos excel em um só arquivo? sim/não: ").strip().lower()
         if mesclar == "sim":
-            excel_utils.merge_excel_files(output_path_arquivos_organizados,input_path_raiz_dados + "/exames_univas.xlsx")
+            exames_mesclados = input_path_raiz_dados + "/exames_univas.xlsx"
+            excel_utils.merge_excel_files(output_path_arquivos_organizados, exames_mesclados)
+            
+            # Substituir HGM, CHGM, VGM por HCM, CHCM, VCM
+            excel_utils.rename_columns(exames_mesclados)
+
+            # Removendo cabeçalhos não validados
+            # OBS.: a função NÃO filtra corretamente os marcadores que vêm duplicados nos arquivos
+            excel_utils.remove_unvalidated_headers(exames_mesclados)
+
             print("Arquivos mesclados")
             break
         elif mesclar == "não":
@@ -74,7 +83,8 @@ if __name__ == "__main__":
         parear = input("Deseja parear os exames da univas com os espectros? sim/não: ").strip().lower()
         if parear == "sim":
             input_espectros = input("Insira o caminho para o arquivo csv contendo os espectros do Progenos: ")
-            pair.pair(input_espectros, input_path_raiz_dados + "/exames_univas.xlsx", input_path_raiz_dados + "/pareados.xlsx")
+            pareados = input_path_raiz_dados + "/pareados.xlsx"
+            pair.pair(input_espectros, input_path_raiz_dados + "/exames_univas.xlsx", pareados)
             print("Exames pareados")
             break
         elif parear == "não":

@@ -199,15 +199,42 @@ def verify_numbers_in_headers(input_file):
             print(f"O arquivo {input_file} possui pelo menos uma coluna {col} com os caracteres '.1' no cabeçalho.")
             continue
 
+# Marcadores VGM, HGM, CHGM são subtituidos por VCM, HCM, CHCM
+def rename_columns(file_path):
+    # Carrega o arquivo Excel e a aba específica
+    df = pd.read_excel(file_path)
+
+    # Dicionário colunas para renomear
+    colunas = {"VGM": "VCM", "HGM": "HCM", "CHGM": "CHCM"}
+
+    df = df.rename(columns=colunas)
+    df.to_excel(file_path, index=False)
+
+# Atenção, essa função não trata marcadores duplicados!!!
+def remove_unvalidated_headers(file_path):
+    cabecalho_validado = ["Data", "Atendimento", "Código", "Glicose", "TSHUltraSensível","T4Livre", "Basófilos", "Bastões", "CHCM", "Eosinófilos", "Eritroblasto", "Hemácias", "Hematócrito", "Hemoglobina", "HCM", "Linfócitos", "LinfócitosAtípicos", "Metamielócitos", "Mielócitos", "Monócitos", "Neut.Segmentados", "Plaquetas", "RDW", "VCM", "Cálcio","Creatinina", "Magnésio", "Potássio", "ProteínaCReativa(Quantitativa)", "Sódio", "Uréia", "INR", "AtividadedeProtrombina", "TempodeProtrombina", "TempodeTromboplastinaParcialAtivado", "AlaninaAminotransferase(ALT)", "AspartatoAminotransferase(AST)", "ÁcidoÚrico", "Albumina", "BilirrubinaDireta", "BilirrubinaIndireta", "BilirrubinaTotal", "Fósforo", "ProteínasTotais", "Amilase", "ColesterolHDL", "ColesterolLDL", "ColesterolTotal", "ColesterolVLDL", "FosfataseAlcalina", "Gama-GlutamilTransferase(GGT)", "Lipase", "Triglicerídeos", "Ferritina", "VelocidadedeHemossedimentação", "ParatormonioPTH", "DesidrogenaseLática-LDH", "CreatinoFosfoquinase-CPK", "FerroSérico", "GasometriaVenosaBE", "GasometriaVenosacHCO3", "GasometriaVenosactCO2", "GasometriaVenosaGLICEMIA", "GasometriaVenosaLactato", "GasometriaVenosapCO2", "GasometriaVenosapH", "GasometriaVenosapO2", "GasometriaVenosasO2", "FERROSÉRICO", "HemoglobinaGlicada", "ÁcidoFólico", "PSALivre", "PSATotal", "GasometriaArterialBE", "GasometriaArterialcHCO3", "GasometriaArterialctCO2", "GasometriaArterialGLICEMIA", "GasometriaArterialLactato", "GasometriaArterialpCO2", "GasometriaArterialpH", "GasometriaArterialpO2", "Lactato(ácidolático)", "FatorReumatóide","CálcioIônico","T3Livre","CreatinoFosfoquinase-FraçãoMB","TroponinaI","GLICEMIAPÓSPRANDIAL","Cloretos","25HidroxivitaminaD","Testosterona", "FSH-HormônioFolículoEstimulante", "LH-HormônioLuteinizante", "Ciclosporina", "AlfaFetoproteína", "GasometriaArterialsO2", "Prolactina", "Progesterona", "Estradiol.17Beta", "CEA", "Tacrolimus", "ABO-RhD-TipagemSanguínea", "FatorRh", "T4Total"]
+
+    df = pd.read_excel(file_path)
+
+    # Obtém as coluans do Dataframe
+    colunas = list(df.columns)
+    # faz a diff das colunas para remover as não validadas
+    diff = [column for column in colunas if column not in cabecalho_validado]
+    # Remove as colunas não validadas
+    df.drop(columns=diff, inplace=True)
+    # Sobrescreve o arquivo já existente
+    df.to_excel(file_path, index=False)
+
+
 if __name__ == '__main__':
     # Mesclando os exames em um único excel
-    input_path_arquivo_excel = "/home/vini/Desktop/pareamento/pareamento-09-2023/5.excel_organizados"
-    output_excel_mesclado = "/home/vini/Desktop/pareamento/pareamento-09-2023/exames_univas.xlsx"
-    merge_excel_files(input_path_arquivo_excel, output_excel_mesclado)
-    print("Arquivos mesclados com sucesso!")
+    # input_path_arquivo_excel = "/home/vini/Desktop/pareamento/pareamento-09-2023/5.excel_organizados"
+    # output_excel_mesclado = "/home/vini/Desktop/pareamento/pareamento-09-2023/exames_univas.xlsx"
+    # merge_excel_files(input_path_arquivo_excel, output_excel_mesclado)
+    # print("Arquivos mesclados com sucesso!")
 
     # Verificando números nos cabeçalhos
-    # input_path_diretorio_excel = "/home/vini/Desktop/pareamento/pareamento-09-2023/5.excel_organizados"
+    # input_path_diretorio_excel = "/home/vini/Desktop/pareamento/pareamento-01-2024/5.excel_organizados"
     # file_processing.verify_files(input_path_diretorio_excel, verify_numbers_in_headers)
     # print("Verificação concluída com sucesso")
 
@@ -221,3 +248,13 @@ if __name__ == '__main__':
     # espectros = "/home/vini/Desktop/pareamento/pareamento-09-2023/espectros_2023_setembro.csv"
     # exames_univas = "/home/vini/Desktop/pareamento/pareamento-09-2023/exames_univas.xlsx"
     # verify_type(exames_univas)
+
+    # Renomear colunas VGM, HGM, CHGM 
+    # input_path = "/home/vini/Desktop/pareamento/pareamento-2023/pareamento-11-2023/teste.xlsx"
+    # renomeia_colunas(input_path)
+    # print("Colunas renomeadas")
+
+    # Removendo colunas não validadas
+    input_path = "/home/vini/Desktop/pareamento/pareamento-2023/pareamento-12-2023/teste.xlsx"
+    remove_unvalidated_headers(input_path)
+    print("Colunas removidas")
