@@ -149,6 +149,9 @@ def verify_files(input_folder_path, func):
                 print(f"Arquivo inválido ou corrompido: {caminho_completo}")
 
 def convert_to_float(value):
+    # A próxima linha não deveria ter sido implementada, mas deixar ela para o marcador não ter o caractere "." 
+    if value == "Estradiol, 17 Beta":
+        return value
     value = value.replace(',', '.')
     try:
         return float(value)
