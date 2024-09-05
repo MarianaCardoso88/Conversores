@@ -189,15 +189,28 @@ def merge_excel_files(root_directory, output_file):
     
     return output_file
 
-def verify_numbers_in_headers(input_file):
+def verify_duplicated_markers(input_file):
     # Lendo o arquivo Excel
     df = pd.read_excel(input_file, engine='openpyxl')
 
-    # Verificando se há números nas colunas
-    for col in df.columns:
-        if ".1" in col:
-            print(f"O arquivo {input_file} possui pelo menos uma coluna {col} com os caracteres '.1' no cabeçalho.")
-            continue
+    # Acessando a primeira coluna
+    primeira_coluna = df.iloc[:, 0]
+
+    visto = set()
+    repetido = []
+    for item in primeira_coluna:
+        if item in visto:
+            repetido.append(item)
+        else:
+            visto.add(item)
+    if len(repetido) == 0:
+        print(f"Arquivo {input_file} sem marcadores repetidos")
+    else:
+        print(f"Arquivo {input_file} com os seguintes marcadores duplicados")
+        for marcador in repetido:
+            print(marcador)
+        print()
+        input(f"Processamento pausado para a edição manual, precione enter para continuar após editar o arquivo {input_file}")
 
 # Marcadores VGM, HGM, CHGM são subtituidos por VCM, HCM, CHCM
 def rename_columns(file_path):
@@ -239,10 +252,10 @@ if __name__ == '__main__':
     # print("Verificação concluída com sucesso")
 
     # Organizando exames
-    # input_arquivo_excel = "5785692.xlsx"
-    # output_excel_organizado = "1.5785692-organizado.xlsx"
-    # organize_exams(input_arquivo_excel, output_excel_organizado)
-    # print("Arquivo organizado")
+    input_arquivo_excel = "/home/vini/Desktop/pareamento/testes/7815822_dois_exames.xlsx"
+    output_excel_organizado = "/home/vini/Desktop/pareamento/testes/7815822_dois_exames__.xlsx"
+    organize_exams(input_arquivo_excel, output_excel_organizado)
+    print("Arquivo organizado")
 
     # Verificando tipos das colunas
     # espectros = "/home/vini/Desktop/pareamento/pareamento-09-2023/espectros_2023_setembro.csv"
@@ -255,6 +268,6 @@ if __name__ == '__main__':
     # print("Colunas renomeadas")
 
     # Removendo colunas não validadas
-    input_path = "/home/vini/Desktop/pareamento/pareamento-2023/pareamento-12-2023/teste.xlsx"
-    remove_unvalidated_headers(input_path)
-    print("Colunas removidas")
+    # input_path = "/home/vini/Desktop/pareamento/pareamento-2023/pareamento-12-2023/teste.xlsx"
+    # remove_unvalidated_headers(input_path)
+    # print("Colunas removidas")

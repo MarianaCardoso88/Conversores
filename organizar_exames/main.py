@@ -19,9 +19,6 @@ def clean_logs():
 if __name__ == "__main__":
     clean_logs()
 
-    # Criar script para logar arquivos com mais de um exame antes de passar pro excel
-    # Criar script para identificar arquivos com biomarcadores com mesmos nomes, mas obtidos de formas diferentes
-
     # Solicita o caminho raiz das pastas de entrada
     input_path_raiz_dados = input("Digite o caminho raiz que possue a pasta dos TXTs organizados por dia: ")
     
@@ -49,6 +46,10 @@ if __name__ == "__main__":
     output_path_arquivos_excel = input_path_raiz_dados + "/4.excel"
     file_processing.txt_to_excel(output_txt_sem_linhas_inuteis, output_path_arquivos_excel)
     print("Conversão de TXT para Excel concluída.")
+    
+    # Encontrar arquivos com marcadores duplicados e pausar processamento para a edição manual
+    print("Encontrando arquivos com marcadores duplicados")
+    file_processing.verify_files(output_path_arquivos_excel, excel_utils.verify_duplicated_markers)
 
     # Organizando os códigos dos exames
     print("Organizando arquivos xlsx...")
@@ -101,7 +102,7 @@ if __name__ == "__main__":
                 input_tecles = input("Insira o caminho para o arquivo xlsx contendo os TCLEs ")
                 tcles_filters.filter(input_path_raiz_dados + "/pareados.xlsx", input_tecles, input_path_raiz_dados + "/data_set.xlsx")
                 print("Exames filtrados com base nos TCLEs salvo em " + input_path_raiz_dados + "/data_set.xlsx")
-                tcles_filters.reexport(input_path_raiz_dados + "/pareados.xlsx", input_tecles, input_path_raiz_dados + "tcles_sem_exames.xlsx")
+                tcles_filters.reexport(input_path_raiz_dados + "/pareados.xlsx", input_tecles, input_path_raiz_dados + "/tcles_sem_exames.xlsx")
                 print("Diferença dos TCLEs com data_set salvo em " + input_path_raiz_dados + "/tcles_sem_exames.xlsx")
                 break
             elif filtrar == "não":
@@ -109,5 +110,3 @@ if __name__ == "__main__":
                 break
             else:
                 print("Resposta inválida. Por favor, digite 'sim' ou 'não'.")
-
-    # Implementar alteração dos cabeçalhos VGM, HGM, CHGM
