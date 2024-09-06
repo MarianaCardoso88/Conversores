@@ -68,7 +68,7 @@ if __name__ == "__main__":
             excel_utils.rename_columns(exames_mesclados)
 
             # Removendo cabeçalhos não validados
-            # OBS.: a função NÃO filtra corretamente os marcadores que vêm duplicados nos arquivos
+            # OBS.: a função NÃO filtra corretamente os marcadores que vêm duplicados nos arquivos, ela apenas remove os marcadores não validados
             excel_utils.remove_unvalidated_headers(exames_mesclados)
 
             print("Arquivos mesclados")
