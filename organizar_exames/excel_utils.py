@@ -223,6 +223,25 @@ def rename_columns(file_path):
     df = df.rename(columns=colunas)
     df.to_excel(file_path, index=False)
 
+# Filtro para remover marcadores que possuem materiais que não estão validados
+# Implementar -> se a coluna 'Material' não tiver nada em suas células -> não processar arquivo
+def filter_materials(input_file, output_file):
+    # Lendo arquivo excel
+    df = pd.read_excel(input_file)
+
+    # materiais validados
+    keywords_keep = ["sangue total citrato", "sangue total com edta", "soro", "sangue venoso heparinizado", "sangue arterial heparinizado", "plasma heparina"]
+
+    # Transforma todos os materiais em lower case
+    df['Material'] = df['Material'].str.lower()
+
+    # Filtra o dataframe com base nas keywords e não remove linhas que possuem material
+    df_filtrado = df[df['Material'].isin(keywords_keep) | df['Material'].isnull()]
+
+    # Salva dataframe em output_file
+    df_filtrado.to_excel(output_file, index=False)
+
+
 # Atenção, essa função não trata marcadores duplicados!!!
 def remove_unvalidated_headers(file_path):
     cabecalho_validado = ["Data", "Atendimento", "Código", "Glicose", "TSHUltraSensível","T4Livre", "Basófilos", "Bastões", "CHCM", "Eosinófilos", "Eritroblasto", "LeucócitosTotais","Hemácias", "Hematócrito", "Hemoglobina", "HCM", "Linfócitos", "LinfócitosAtípicos", "Metamielócitos", "Mielócitos", "Monócitos", "Neut.Segmentados", "Plaquetas", "RDW", "VCM", "Cálcio","Creatinina", "Magnésio", "Potássio", "ProteínaCReativa(Quantitativa)", "Sódio", "Uréia", "INR", "AtividadedeProtrombina", "TempodeProtrombina", "TempodeTromboplastinaParcialAtivado", "AlaninaAminotransferase(ALT)", "AspartatoAminotransferase(AST)", "ÁcidoÚrico", "Albumina", "BilirrubinaDireta", "BilirrubinaIndireta", "BilirrubinaTotal", "Fósforo", "ProteínasTotais", "Amilase", "ColesterolHDL", "ColesterolLDL", "ColesterolTotal", "ColesterolVLDL", "FosfataseAlcalina", "Gama-GlutamilTransferase(GGT)", "Lipase", "Triglicerídeos", "Ferritina", "VelocidadedeHemossedimentação", "ParatormonioPTH", "DesidrogenaseLática-LDH", "CreatinoFosfoquinase-CPK", "FerroSérico", "GasometriaVenosaBE", "GasometriaVenosacHCO3", "GasometriaVenosactCO2", "GasometriaVenosaGLICEMIA", "GasometriaVenosaLactato", "GasometriaVenosapCO2", "GasometriaVenosapH", "GasometriaVenosapO2", "GasometriaVenosasO2", "GasometriaVenosaHematócrito", "GasometriaArterialHematócrito", "GasometriaArterialFIO2", "GasometriaVenosaFIO2", "GasometriaArterialpH","FERROSÉRICO", "HemoglobinaGlicada", "GlicemiaMédiaEstimada", "ÁcidoFólico", "PSALivre", "PSATotal", "GasometriaArterialBE", "GasometriaArterialcHCO3", "GasometriaArterialctCO2", "GasometriaArterialGLICEMIA", "GasometriaArterialLactato", "GasometriaArterialpCO2", "GasometriaArterialpO2", "Lactato(ácidolático)", "FatorReumatóide","CálcioIônico","T3Livre","CreatinoFosfoquinase-FraçãoMB","TroponinaI","GlicemiaPósPrandial","Cloretos","25HidroxivitaminaD", "Cortisol", "VitaminaC(ÁcidoAscórbico)", "VitaminaB12","Testosterona", "FSH-HormônioFolículoEstimulante", "LH-HormônioLuteinizante", "Ciclosporina", "AlfaFetoproteína", "GasometriaArterialsO2", "Prolactina", "Progesterona", "Estradiol,17Beta", "CEA", "Tacrolimus", "ABO-RhD-TipagemSanguínea", "FatorRh", "T4Total"]
@@ -252,10 +271,10 @@ if __name__ == '__main__':
     # print("Verificação concluída com sucesso")
 
     # Organizando exames
-    input_arquivo_excel = "/home/vini/Desktop/pareamento/testes/7815822_dois_exames.xlsx"
-    output_excel_organizado = "/home/vini/Desktop/pareamento/testes/7815822_dois_exames__.xlsx"
-    organize_exams(input_arquivo_excel, output_excel_organizado)
-    print("Arquivo organizado")
+    # input_arquivo_excel = "/home/vini/Desktop/pareamento/testes/7815822_dois_exames.xlsx"
+    # output_excel_organizado = "/home/vini/Desktop/pareamento/testes/7815822_dois_exames__.xlsx"
+    # organize_exams(input_arquivo_excel, output_excel_organizado)
+    # print("Arquivo organizado")
 
     # Verificando tipos das colunas
     # espectros = "/home/vini/Desktop/pareamento/pareamento-09-2023/espectros_2023_setembro.csv"
@@ -271,3 +290,9 @@ if __name__ == '__main__':
     # input_path = "/home/vini/Desktop/pareamento/pareamento-2023/pareamento-12-2023/teste.xlsx"
     # remove_unvalidated_headers(input_path)
     # print("Colunas removidas")
+
+    # Filtrando com base nos materiais do exame
+    input_file = "/home/vini/Desktop/pareamento/testes/7815822.xlsx"
+    output_file = "/home/vini/Desktop/pareamento/testes/7815822-filtrado.xlsx"
+    filter_materials(input_file, output_file)
+    print("Exame filtrado")
