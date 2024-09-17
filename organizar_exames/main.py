@@ -41,19 +41,25 @@ if __name__ == "__main__":
     file_processing.process_files(output_gasometrias_tratadas, output_txt_sem_linhas_inuteis, txt_utils.remove_lines_with_keywords)
     print("Linhas removidas")
 
-    # Converte arquivos de TXT para Excel
+    # Converte arquivos TXT para Excel
     print("Convertendo TXTs para xlsx...")
     output_path_arquivos_excel = input_path_raiz_dados + "/4.excel"
     file_processing.txt_to_excel(output_txt_sem_linhas_inuteis, output_path_arquivos_excel)
     print("Conversão de TXT para Excel concluída.")
+
+    # Filtrar marcadores com base nos materiais
+    print("Filtrando marcadores com base nos materiais...")
+    output_path_arquivos_excel_com_marcadores_filtrados = input_path_raiz_dados + "/5.excel_filtrados"
+    file_processing.process_files(output_path_arquivos_excel, output_path_arquivos_excel_com_marcadores_filtrados, excel_utils.filter_materials)
+    print("Marcadores filtrados com base nos materiais")
     
     # Encontrar arquivos com marcadores duplicados e pausar processamento para a edição manual
     print("Encontrando arquivos com marcadores duplicados")
-    file_processing.verify_files(output_path_arquivos_excel, excel_utils.verify_duplicated_markers)
+    file_processing.verify_files(output_path_arquivos_excel_com_marcadores_filtrados, excel_utils.verify_duplicated_markers)
 
     # Organizando os códigos dos exames
     print("Organizando arquivos xlsx...")
-    output_path_arquivos_organizados = input_path_raiz_dados + "/5.excel_organizados"
+    output_path_arquivos_organizados = input_path_raiz_dados + "/6.excel_organizados"
     file_processing.process_files(output_path_arquivos_excel, output_path_arquivos_organizados, excel_utils.organize_exams)
     print("Organização dos códigos dos exames concluída.")
 
