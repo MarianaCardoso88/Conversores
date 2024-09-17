@@ -55,13 +55,13 @@ def changing_gasometrias_exams_strings(input_file, output_file):
     with open(output_file, 'w', encoding='UTF-8') as outfile:
         # Itera sobre cada linha do arquivo
         i = 0
-        while i < (len(lines) - 1):
+        while i < (len(lines)):
             # Verifica se existe uma linha com a keyword
             if keyword in lines[i]:
                 # Pula a linha da keyword
                 i += 1
                 # Itera sobre o restante das linhas do arquivo
-                while i < (len(lines) - 1):
+                while i < (len(lines)):
                     # Condição para não alterar linhas depois das GASOMETRIAS
                     if (lines[i][0] == ' ') and (lines[i][1] == ' ') and (lines[i][2] == ' ') and (lines[i][3] == ' '):
                         # Itera sobre as chaves dos dois dicionários que são iguais
@@ -101,11 +101,11 @@ if __name__ == '__main__':
     # file_processing.process_files(input_file_txt, output_txt_sem_linhas_inuteis, remove_lines_with_keywords)
     # print("Linhas removidas com sucesso!")]
     
-    # input_file_txt = "./7516347_utf8"
-    # output_file_txt = "./7516347_tratado"
-    # changing_gasometrias_exams_strings(input_file_txt, output_file_txt)
-    # print('finalizado')
-
-    input_file_txt = "/home/vini/Desktop/pareamento/pareamento-09-2023/1.TXTs_utf-8/22/5792118"
-    print(detect_encoding(input_file_txt))
+    input_file_txt = "/home/vini/Desktop/pareamento/testes/funcao_gasometrias/5798193"
+    output_file_txt = "/home/vini/Desktop/pareamento/testes/funcao_gasometrias/5798193_tratado"
+    changing_gasometrias_exams_strings(input_file_txt, output_file_txt)
     print('finalizado')
+
+    # input_file_txt = "/home/vini/Desktop/pareamento/pareamento-09-2023/1.TXTs_utf-8/22/5792118"
+    # print(detect_encoding(input_file_txt))
+    # print('finalizado')
