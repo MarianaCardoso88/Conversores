@@ -229,6 +229,11 @@ def filter_materials(input_file, output_file):
     # Lendo arquivo excel
     df = pd.read_excel(input_file)
 
+    # Verifica se a coluna 'Material' existe e se todas as suas células estão vazias
+    if 'Material' not in df.columns or df['Material'].isnull().all():
+        print(f"A coluna 'Material' está vazia ou não existe no arquivo {input_file}. O arquivo não será processado.")
+        return
+
     # materiais validados
     keywords_keep = ["sangue total citrato", "sangue total com edta", "soro", "sangue venoso heparinizado", "sangue arterial heparinizado", "plasma heparina"]
 
