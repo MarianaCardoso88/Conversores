@@ -165,8 +165,10 @@ def verify_type(input_file):
     # Lendo o arquivo Excel
     df = pd.read_excel(input_file, engine="openpyxl")
 
-    # Verificando o tipo de cada coluna
-    print(df.dtypes)
+    # Verificando o tipo de cada coluna e filtrando tipos diferentes de float64
+    non_float64_types = df.dtypes[(df.dtypes != 'float64') & (df.dtypes != "int64")]
+
+    print(non_float64_types)
 
 def merge_excel_files(root_directory, output_file):
     # Lista para armazenar os dataframes
@@ -224,7 +226,6 @@ def rename_columns(file_path):
     df.to_excel(file_path, index=False)
 
 # Filtro para remover marcadores que possuem materiais que não estão validados
-# Implementar -> se a coluna 'Material' não tiver nada em suas células -> não processar arquivo
 def filter_materials(input_file, output_file):
     # Lendo arquivo excel
     df = pd.read_excel(input_file)
@@ -262,6 +263,22 @@ def remove_unvalidated_headers(file_path):
     # Sobrescreve o arquivo já existente
     df.to_excel(file_path, index=False)
 
+def compare_columns(file_path_data_set_1, file_path_data_set_2):
+    df1 = pd.read_excel(file_path_data_set_1)
+    df2 = pd.read_excel(file_path_data_set_2)
+
+    colunas_data_set_1 = set(df1.columns)
+    colunas_data_set_2 = set(df2.columns)
+
+    # Colunas ausentes em df2, mas que estão em df1
+    colunas_somente_df1 = colunas_data_set_1 - colunas_data_set_2
+    print(f"Colunas no df1, mas não no df2: {colunas_somente_df1}")
+
+    # Colunas presentes em df2, mas ausentes em df1
+    colunas_somente_df2 = colunas_data_set_2 - colunas_data_set_1
+    print(f"Colunas no df2, mas não no df1: {colunas_somente_df2}")
+
+
 
 if __name__ == '__main__':
     # Mesclando os exames em um único excel
@@ -282,9 +299,9 @@ if __name__ == '__main__':
     # print("Arquivo organizado")
 
     # Verificando tipos das colunas
-    # espectros = "/home/vini/Desktop/pareamento/pareamento-09-2023/espectros_2023_setembro.csv"
-    # exames_univas = "/home/vini/Desktop/pareamento/pareamento-09-2023/exames_univas.xlsx"
-    # verify_type(exames_univas)
+    data_set = "/home/vini/Desktop/pareamento/pareamento-2023/pareamento-11-2023/data_set_novembro_2023.xlsx"
+    print(data_set)
+    verify_type(data_set)
 
     # Renomear colunas VGM, HGM, CHGM 
     # input_path = "/home/vini/Desktop/pareamento/pareamento-2023/pareamento-11-2023/teste.xlsx"
@@ -297,7 +314,12 @@ if __name__ == '__main__':
     # print("Colunas removidas")
 
     # Filtrando com base nos materiais do exame
-    input_file = "/home/vini/Desktop/pareamento/testes/7815822.xlsx"
-    output_file = "/home/vini/Desktop/pareamento/testes/7815822-filtrado.xlsx"
-    filter_materials(input_file, output_file)
-    print("Exame filtrado")
+    # input_file = "/home/vini/Desktop/pareamento/testes/7815822.xlsx"
+    # output_file = "/home/vini/Desktop/pareamento/testes/7815822-filtrado.xlsx"
+    # filter_materials(input_file, output_file)
+    # print("Exame filtrado")
+
+    # Comparando colunas e diferença entre dois dataframes
+    data_set_1 = "/home/vini/Desktop/pareamento/pareamento-2023/pareamento-11-2023/data_set_novembro_2023.xlsx"
+    data_set_2 = "/home/vini/Desktop/pareamento/pareamento-2023/pareamento-09-2023/data_set_setembro_2023.xlsx"
+    compare_columns(data_set_1, data_set_2)
