@@ -1,0 +1,1 @@
+# Diretório necessário para armazenar os logs de cada função rodada
