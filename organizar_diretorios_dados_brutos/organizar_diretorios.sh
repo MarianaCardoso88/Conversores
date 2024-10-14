@@ -6,9 +6,9 @@
 # - Para arquivos com mais de uma data o script adiciona ele em pastas de datas diferentes, ou seja, o dado é duplicado.
 
 # Caminho base onde estão localizadas as pastas originais
-BASE_PATH="/home/vini/Desktop/pareamento/brutos-desorganizados"
+BASE_PATH="/home/vini/Desktop/pareamento/pareamento-2023/pareamento-11-2023-reexportados/2024-unpacked"
 # Caminho onde queremos criar as novas pastas organizadas por data
-OUTPUT_BASE_PATH="/home/vini/Desktop/pareamento/brutos-organizados"
+OUTPUT_BASE_PATH="/home/vini/Desktop/pareamento/pareamento-2023/pareamento-11-2023-reexportados/brutos-organizados"
 
 # Função para organizar arquivos por data
 organizar_arquivos_por_data() {
@@ -17,23 +17,25 @@ organizar_arquivos_por_data() {
 
 	# Percorrer todas as pastas e arquivos no diretório base
 	find "$base_path" -type f | while read -r file_path; do
-		# Ignorar arquivos com extensões específicas
-		if [[ $file_path == *.db || $file_path == *.jpeg || $file_path == *.pptx || $file_path == *.mp4 || $file_path == *.csv || $file_path == *.xlsx || $file_path == *.pdf ]]; then
-			echo "Arquivo $file_path não pasosu na verificação de extensão"
+		# Ignorar arquivos sem a extensão csv
+		if [[ ! "$file_path" =~ \.csv$ && ! "$file_path" =~ \.CSV$ ]]; then
+			echo "Arquivo $file_path não tem a extensão .csv ou .CSV"
 			continue
 		fi
-		# Extrair todas as datas no formato "DD/MM/YY" do arquivo
-		datas_formatadas=$(grep -oE '[0-9]{2}/[0-9]{2}/[0-9]{2}' "$file_path" | sort | uniq)
+		# Extrair todas as datas no formato "DD/MM/YYYY" do arquivo
+		datas_formatadas=$(iconv -f utf-16 -t utf-8 "$file_path" | grep -oE '[0-9]{2}/[0-9]{2}/[0-9]{4}' | sort | uniq)
 
 		# Verificar se alguma data foi encontrada
+		echo "Há as seguintes datas [ $datas_formatadas ] no arquivo $file_path"
 		if [[ -n $datas_formatadas ]]; then
 			# Pegar a primeira data encontrada
-            primeira_data=$(echo "$datas_formatadas" | head -n 1)
+			primeira_data=$(echo "$datas_formatadas" | head -n 1)
 
 			# Extrair dia, mês e ano
 			dia=$(echo "$primeira_data" | cut -d'/' -f1)
 			mes=$(echo "$primeira_data" | cut -d'/' -f2)
-			ano="20$(echo "$primeira_data" | cut -d'/' -f3)"
+			# ano=$(echo "$primeira_data" | cut -d'/' -f3 | cut -d' ' -f1)
+			ano=$(echo "$primeira_data" | cut -d'/' -f3)
 			data="$ano/$mes/$dia"
 
 			# Criar o caminho da nova pasta baseado na data
@@ -61,9 +63,9 @@ organizar_arquivos_por_data() {
 			done
 
 			# Se um arquivo duplicado foi encontrado pular ele
-            if [[ $duplicate_found == true ]]; then
-                continue
-            fi
+			if [[ $duplicate_found == true ]]; then
+				continue
+			fi
 
 			# Verificar se já existe um arquivo com o mesmo nome na pasta de destino
 			if [[ -e $dest_path ]]; then
@@ -82,7 +84,7 @@ organizar_arquivos_por_data() {
 				echo "Copiado $file_path para $nova_pasta/"
 			fi
 		else
-			echo "Nenhuma data encontrada no formato DD/MM/YY no arquivo $file_path"
+			echo "Nenhuma data encontrada no formato DD/MM/YYYY no arquivo $file_path"
 		fi
 	done
 }
