@@ -10,23 +10,24 @@ def remove_lines_with_keywords(input_file, output_file):
         for line in lines:
             if not any(keyword in line for keyword in keywords):
                 outfile.write(line)
-                
+
 def convert_to_utf8(input_file, output_file):
-    with open(input_file, 'r', encoding='ISO-8859-1') as infile:
-        content = infile.read()
-
-    with open(output_file, 'w', encoding='UTF-8') as outfile:
-        outfile.write(content)
-
-def convert_to_utf8_if_needed(input_file, output_file):
     # Detecta o encoding do arquivo de entrada
     with open(input_file, 'rb') as infile:
         raw_data = infile.read()
         result = chardet.detect(raw_data)
         encoding = result['encoding']
+
+    # Se o encoding for UTF-16, converte para UTF-8
+    if encoding == 'UTF-16' or encoding == 'utf-16':
+        with open(input_file, 'r', encoding='UTF-16') as infile:
+            content = infile.read()
+
+        with open(output_file, 'w', encoding='UTF-8') as outfile:
+            outfile.write(content)
     
     # Se o encoding for ISO-8859-1, converte para UTF-8
-    if encoding == 'ISO-8859-1':
+    elif encoding == 'ISO-8859-1' or encoding == 'iso-8859-1':
         with open(input_file, 'r', encoding='ISO-8859-1') as infile:
             content = infile.read()
 
@@ -101,11 +102,16 @@ if __name__ == '__main__':
     # file_processing.process_files(input_file_txt, output_txt_sem_linhas_inuteis, remove_lines_with_keywords)
     # print("Linhas removidas com sucesso!")]
     
-    input_file_txt = "/home/vini/Desktop/pareamento/testes/funcao_gasometrias/5798193"
-    output_file_txt = "/home/vini/Desktop/pareamento/testes/funcao_gasometrias/5798193_tratado"
-    changing_gasometrias_exams_strings(input_file_txt, output_file_txt)
-    print('finalizado')
+    # input_file_txt = "/home/vini/Desktop/pareamento/testes/funcao_gasometrias/5798193"
+    # output_file_txt = "/home/vini/Desktop/pareamento/testes/funcao_gasometrias/5798193_tratado"
+    # changing_gasometrias_exams_strings(input_file_txt, output_file_txt)
+    # print('finalizado')
 
     # input_file_txt = "/home/vini/Desktop/pareamento/pareamento-09-2023/1.TXTs_utf-8/22/5792118"
     # print(detect_encoding(input_file_txt))
     # print('finalizado')
+
+    input_file_csv_utf16 = "/home/vini/Desktop/pareamento/pareamento-2023/pareamento-11-2023-reexportados/testeutf16.csv"
+    output_file_csv_utf8 = "/home/vini/Desktop/pareamento/pareamento-2023/pareamento-11-2023-reexportados/testeutf8.csv"
+    convert_to_utf8_if_needed(input_file_csv_utf16, output_file_csv_utf8)
+    print("Conversão finalizada")

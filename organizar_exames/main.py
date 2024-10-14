@@ -1,7 +1,7 @@
 import os
 import file_processing
 import excel_utils
-import txt_utils
+import csv_utils
 import pair
 import tcles_filters
 
@@ -22,12 +22,12 @@ if __name__ == "__main__":
     # Solicita o caminho raiz das pastas de entrada
     input_path_raiz_dados = input("Digite o caminho raiz que possue a pasta dos TXTs organizados por dia: ")
     
-    # Converte os arquivos TXT da ISO-8859-1 para UTF-8
-    print("Convertendo TXTs ISO-8859-1 para UTF-8...")
+    # Converte os arquivos CSV de UTF-16 para UTF-8
+    print("Convertendo CSVs UTF-16 para UTF-8...")
     input_path_dados_brutos = input_path_raiz_dados + "/0.brutos"
-    output_txt_utf8 = input_path_raiz_dados + "/1.TXTs_utf-8"
-    file_processing.process_files(input_path_dados_brutos, output_txt_utf8, txt_utils.convert_to_utf8_if_needed)
-    print("TXTs convertidos para UTF-8")
+    output_txt_utf8 = input_path_raiz_dados + "/1.CSVs_utf-8"
+    file_processing.process_files(input_path_dados_brutos, output_txt_utf8, csv_utils.convert_to_utf8_if_needed)
+    print("CSVs convertidos para UTF-8")
 
     # Tratar Gasometrias e tipo de sangue venoso e arterial
     print("Tratando Gasometrias...")
