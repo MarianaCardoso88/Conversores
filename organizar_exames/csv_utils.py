@@ -72,8 +72,8 @@ def changing_gasometrias_exams_strings(input_file, output_file):
                 # Itera sobre o restante das linhas do arquivo
                 while i < (len(lines)):
                     # Condição para não alterar linhas depois das GASOMETRIAS
-                    if (lines[i][1] == ' ') and (lines[i][2] == ' ') and (lines[i][3] == ' ') and (lines[i][4] == ' '):
-                        # Itera sobre as chaves dos dois dicionários que são iguais
+                    if (lines[i][1] == lines[i][2] == lines[i][3] == lines[i][4] == ' '):
+                        # Itera sobre as chaves dos dois dicionários (obs.: as chaves dos dicionários são iguais, porém os valores são diferentes)
                         for j in range(len(dicts_keys)):
                             if (dicts_keys[j] in lines[i]) and ('Venoso' in lines[i]):
                                 # Substituindo pela string correta
