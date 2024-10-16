@@ -11,6 +11,14 @@ def remove_lines_with_keywords(input_file, output_file):
             if not any(keyword in line for keyword in keywords):
                 outfile.write(line)
 
+# Força o python a ler o arquivo no formato UTF-16 Little Endian
+def convert_utf16le_to_utf8(input_file, output_file):
+    with open(input_file, 'r', encoding='UTF-16LE') as infile:
+        content = infile.read()
+
+    with open(output_file, 'w', encoding='UTF-8') as outfile:
+        outfile.write(content)
+
 def convert_to_utf8(input_file, output_file):
     # Detecta o encoding do arquivo de entrada
     with open(input_file, 'rb') as infile:
@@ -64,7 +72,7 @@ def changing_gasometrias_exams_strings(input_file, output_file):
                 # Itera sobre o restante das linhas do arquivo
                 while i < (len(lines)):
                     # Condição para não alterar linhas depois das GASOMETRIAS
-                    if (lines[i][0] == ' ') and (lines[i][1] == ' ') and (lines[i][2] == ' ') and (lines[i][3] == ' '):
+                    if (lines[i][1] == ' ') and (lines[i][2] == ' ') and (lines[i][3] == ' ') and (lines[i][4] == ' '):
                         # Itera sobre as chaves dos dois dicionários que são iguais
                         for j in range(len(dicts_keys)):
                             if (dicts_keys[j] in lines[i]) and ('Venoso' in lines[i]):
@@ -113,5 +121,5 @@ if __name__ == '__main__':
 
     input_file_csv_utf16 = "/home/vini/Desktop/pareamento/pareamento-2023/pareamento-11-2023-reexportados/testeutf16.csv"
     output_file_csv_utf8 = "/home/vini/Desktop/pareamento/pareamento-2023/pareamento-11-2023-reexportados/testeutf8.csv"
-    convert_to_utf8_if_needed(input_file_csv_utf16, output_file_csv_utf8)
+    convert_to_utf8(input_file_csv_utf16, output_file_csv_utf8)
     print("Conversão finalizada")
