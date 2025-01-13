@@ -20,25 +20,25 @@ if __name__ == "__main__":
     clean_logs()
 
     # Solicita o caminho raiz das pastas de entrada
-    input_path_raiz_dados = input("Digite o caminho raiz que possue a pasta dos TXTs organizados por dia: ")
+    input_path_raiz_dados = input("Digite o caminho raiz que possue a pasta dos CSVs organizados por dia: ")
     
-    # Converte os arquivos CSV de UTF-16 para UTF-8
+    # Converte os arquivos CSV de UTF-16LE para UTF-8
     print("Convertendo CSVs UTF-16 para UTF-8...")
     input_path_dados_brutos = input_path_raiz_dados + "/0.brutos"
-    output_txt_utf8 = input_path_raiz_dados + "/1.CSVs_utf-8"
-    file_processing.process_files(input_path_dados_brutos, output_txt_utf8, csv_utils.convert_to_utf8_if_needed)
+    output_csv_utf8 = input_path_raiz_dados + "/1.CSVs_utf-8"
+    file_processing.process_files(input_path_dados_brutos, output_csv_utf8, csv_utils.convert_utf16le_to_utf8)
     print("CSVs convertidos para UTF-8")
 
     # Tratar Gasometrias e tipo de sangue venoso e arterial
     print("Tratando Gasometrias...")
-    output_gasometrias_tratadas = input_path_raiz_dados + "/2.TXTs_gasometrias_tratadas"
-    file_processing.process_files(output_txt_utf8, output_gasometrias_tratadas, txt_utils.changing_gasometrias_exams_strings)
+    output_gasometrias_tratadas = input_path_raiz_dados + "/2.CSVs_gasometrias_tratadas"
+    file_processing.process_files(output_csv_utf8, output_gasometrias_tratadas, csv_utils.changing_gasometrias_exams_strings)
     print("Gasometrias tratadas")
 
-    # Remove linhas baseadas em keywords dos arquivos em txt
+    # Remove linhas baseadas em keywords dos arquivos em txt e remove caracteres inúteis
     print("Removendo linhas baseadas em keywords")
     output_txt_sem_linhas_inuteis = input_path_raiz_dados + "/3.TXTs_sem_linhas_inuteis"
-    file_processing.process_files(output_gasometrias_tratadas, output_txt_sem_linhas_inuteis, txt_utils.remove_lines_with_keywords)
+    file_processing.process_files(output_gasometrias_tratadas, output_txt_sem_linhas_inuteis, csv_utils.remove_lines_with_keywords)
     print("Linhas removidas")
 
     # Converte arquivos TXT para Excel
